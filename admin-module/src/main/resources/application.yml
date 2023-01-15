@@ -1,2 +1,19 @@
 server:
   port: 8901
+
+spring:
+  application:
+    name: admin-service
+  output:
+    ansi:
+      enabled: always
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: mysql
+    defer-datasource-initialization: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/ttotw?autoReconnect=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 9269
