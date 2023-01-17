@@ -7,25 +7,28 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Table(name = "purchase")
+@Table(name = "grape_variety")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Entity
-public class Purchase extends CreatedDateEntity {
+public class GrapeVarieties {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
-    @Column(name = "wine_id", nullable = false)
-    private Long wineId;
+    //품종명
+    @Column(name = "origin_name", nullable = false)
+    private String originName;
 
-    @Column(name = "amount", nullable = false)
-    private Long amount;
+    //품종명(한글)
+    @Column(name = "korean_name", nullable = false)
+    private String koreanName;
 
-    @Column(name = "where_to_buy", nullable = false)
-    private String whereToBuy;
+    //설명
+    @Column(name = "description", nullable = false)
+    private String description;
 }
