@@ -37,7 +37,7 @@ public class WebSecurityConfigure {
 
         //요청에 대한 권한 설정
         http.authorizeRequests()
-                .antMatchers("/admin").hasAnyRole("ADMIN")
+                .antMatchers("/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated();
 
         //로그인 설정

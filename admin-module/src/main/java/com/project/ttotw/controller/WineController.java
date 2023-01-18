@@ -8,12 +8,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("")
-public class MainController {
+@RequestMapping("/wine")
+public class WineController {
 
-    @GetMapping("/main")
-    public ModelAndView main() {
-        ModelAndView modelAndView = new ModelAndView("page/index");
+    @GetMapping("/list")
+    public ModelAndView getWineList() {
+        ModelAndView modelAndView = new ModelAndView("page/wine_list");
         return modelAndView;
     }
 }
