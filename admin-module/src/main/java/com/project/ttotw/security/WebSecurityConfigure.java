@@ -22,7 +22,7 @@ public class WebSecurityConfigure {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web -> web.ignoring().antMatchers("/resources/**").requestMatchers(PathRequest.toStaticResources().atCommonLocations()));
+        return (web -> web.ignoring().antMatchers("/resources/**", "/error").requestMatchers(PathRequest.toStaticResources().atCommonLocations()));
     }
 
     @Bean

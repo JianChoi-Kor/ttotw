@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("")
 public class MainController {
 
-    @GetMapping("/main")
+    @GetMapping(value = {"/main", "/"})
     public ModelAndView main() {
         ModelAndView modelAndView = new ModelAndView("page/index");
         return modelAndView;
