@@ -47,12 +47,12 @@ public class Wine extends BaseDateEntity {
     private Long fileId;
 
     //최소 가격
-    @Column(name = "min_amount", nullable = false)
-    private Long minAmount;
+    @Column(name = "min_price", nullable = false)
+    private Long minPrice;
 
     //최고 가격
-    @Column(name = "max_amount", nullable = false)
-    private Long maxAmount;
+    @Column(name = "max_price", nullable = false)
+    private Long maxPrice;
 
     //타닌
     @Column(name = "tannin", nullable = false)

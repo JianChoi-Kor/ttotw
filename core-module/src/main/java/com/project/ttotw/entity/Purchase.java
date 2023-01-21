@@ -23,8 +23,8 @@ public class Purchase extends CreatedDateEntity {
     @Column(name = "wine_id", nullable = false)
     private Long wineId;
 
-    @Column(name = "amount", nullable = false)
-    private Long amount;
+    @Column(name = "price", nullable = false)
+    private Long price;
 
     @Column(name = "where_to_buy", nullable = false)
     private String whereToBuy;
