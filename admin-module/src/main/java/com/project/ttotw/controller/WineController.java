@@ -13,7 +13,7 @@ public class WineController {
 
     @GetMapping("/list")
     public ModelAndView getWineList() {
-        ModelAndView modelAndView = new ModelAndView("page/wine_list");
+        ModelAndView modelAndView = new ModelAndView("page/wine/wine_list");
         return modelAndView;
     }
 }
