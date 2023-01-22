@@ -42,6 +42,9 @@ public class WineController {
     @GetMapping("/modify")
     public ModelAndView modifyWine() {
         ModelAndView modelAndView = new ModelAndView("page/wine/wine_modify");
+
+        //내려주는 데이터 grade, type, country, grapeVarieties 추가
+
         return modelAndView;
     }
 

@@ -11699,3 +11699,25 @@ body {
   font-size: 0.75rem;
   border-radius: 0.25rem !important;
 }
+
+
+
+.mr-250 {
+  margin-right: 250px;
+}
+
+.mw-600 {
+  min-width: 600px;
+}
+
+.form-radio {
+  display: flex;
+}
+
+.form-radio-group > label {
+  margin-right: 1.2em;
+}
+
+.form-radio-title {
+  margin-right: 1.5em;
+}

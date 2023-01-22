@@ -18,7 +18,7 @@ public class WineRequestDto {
         //등급
         private WineGrade grade;
         //타입
-        private WineType wineType;
+        private WineType type;
         //제품명
         private String originName;
         //제품명(한글)
