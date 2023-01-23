@@ -1,6 +1,11 @@
 package com.project.ttotw.enums;
 
+import com.project.ttotw.dto.EnumResDto;
 import lombok.Getter;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public enum CountryOfOrigin {
@@ -22,5 +27,11 @@ public enum CountryOfOrigin {
     CountryOfOrigin(String englishName, String koreanName) {
         this.englishName = englishName;
         this.koreanName = koreanName;
+    }
+
+    public static List<EnumResDto.CommonEnumRes> getEnumList() {
+        return Arrays.stream(CountryOfOrigin.class.getEnumConstants())
+                .map(targetEnum -> new EnumResDto.CommonEnumRes(targetEnum.name(), targetEnum.getEnglishName()))
+                .collect(Collectors.toList());
     }
 }

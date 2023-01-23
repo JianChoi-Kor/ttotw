@@ -85,7 +85,11 @@ public class Wine extends BaseDateEntity {
             joinColumns = {@JoinColumn(name = "wine_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "grape_varieties_id", referencedColumnName = "id")}
     )
-    private Collection<GrapeVarieties> grapeVarieties;
+    private Collection<GrapeVarieties> varieties;
+
+    //품종 상세
+    @Column(name = "varieties_details", nullable = false)
+    private String varietiesDetails;
 
     //삭제 여부(true: 사용 중, false: 삭제)
     @Column(name = "use_at", nullable = false)

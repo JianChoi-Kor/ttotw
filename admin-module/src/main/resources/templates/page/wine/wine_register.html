@@ -5,6 +5,7 @@
       layout:decorate="~{layouts/default_layout}">
 <!-- head -->
 <head>
+    <script src="/js/wine.js" defer></script>
 </head>
 <!-- Content -->
 <div layout:fragment="content">
@@ -15,44 +16,38 @@
                     <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-lg-7 mr-250 mw-600">
-                                <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">와인 등록</h3>
+                                <div class="card shadow-lg border-0 rounded-lg">
+                                    <div class="card-header"><h3 class="text-center font-weight-light my-1">와인 등록</h3>
                                     </div>
                                     <div class="card-body">
                                         <form>
-                                            <!--                                                <div class="row mb-3">-->
-                                            <!--                                                    <div class="col-md-6">-->
-                                            <!--                                                        <div class="form-floating mb-3 mb-md-0">-->
-                                            <!--                                                            <input class="form-control" id="inputFirstName" type="text" placeholder="Enter your first name" />-->
-                                            <!--                                                            <label for="inputFirstName">First name</label>-->
-                                            <!--                                                        </div>-->
-                                            <!--                                                    </div>-->
-                                            <!--                                                    <div class="col-md-6">-->
-                                            <!--                                                        <div class="form-floating">-->
-                                            <!--                                                            <input class="form-control" id="inputLastName" type="text" placeholder="Enter your last name" />-->
-                                            <!--                                                            <label for="inputLastName">Last name</label>-->
-                                            <!--                                                        </div>-->
-                                            <!--                                                    </div>-->
-                                            <!--                                                </div>-->
                                             <div class="form-floating mb-3">
-                                                <input class="form-control" id="koreanName" type="text"/>
+                                                <input class="form-control" id="koreanName" type="text" placeholder="제품명(한글)"/>
                                                 <label for="koreanName">제품명(한글)</label>
                                             </div>
                                             <div class="form-floating mb-3">
-                                                <input class="form-control" id="originName" type="text"/>
+                                                <input class="form-control" id="originName" type="text" placeholder="제품명(영문)"/>
                                                 <label for="originName">제품명(영문)</label>
                                             </div>
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control" id="type" type="text"/>
-                                                <label for="grade">타입</label>
+
+                                            <div class="form-select mb-3">
+                                                <p class="form-select-title">등급</p>
+                                                <select th:name="grade">
+                                                    <option>선택</option>
+                                                    <option th:each="val : ${wineGradeEnumList}" th:value="${val?.code}" th:utext="${val?.description}"></option>
+                                                </select>
                                             </div>
-                                            <div class="form-floating mb-3">
-                                                <input class="form-control" id="grade" type="text"/>
-                                                <label for="grade">등급</label>
+                                            <div class="form-select mb-3">
+                                                <p class="form-select-title">타입</p>
+                                                <select th:name="type">
+                                                    <option>선택</option>
+                                                    <option th:each="val : ${wineTypeEnumList}" th:value="${val?.code}" th:utext="${val?.description}"></option>
+                                                </select>
                                             </div>
+
                                             <div class="form-floating mb-3">
-                                                <input class="form-control" id="price" type="number" min="100"/>
-                                                <label for="price">가격</label>
+                                                <input class="form-control" id="price" type="number" placeholder="가격(원)" min="100"/>
+                                                <label for="price">가격(원)</label>
                                             </div>
 
                                             <div class="form-radio mb-3 mt-3">
@@ -95,31 +90,78 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row mb-3">
-                                                <div class="col-md-6">
-                                                    <div class="form-floating mb-3 mb-md-0">
-                                                        <input class="form-control" id="inputPassword" type="password"
-                                                               placeholder="Create a password"/>
-                                                        <label for="inputPassword">Password</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-floating mb-3 mb-md-0">
-                                                        <input class="form-control" id="inputPasswordConfirm"
-                                                               type="password" placeholder="Confirm password"/>
-                                                        <label for="inputPasswordConfirm">Confirm Password</label>
-                                                    </div>
+                                            <div class="form-radio mb-3 mt-3">
+                                                <p class="form-radio-title">산미(acidity)</p>
+                                                <div class="form-radio-group">
+                                                    <input type="radio" name="acidity" id="acidity-1" checked>
+                                                    <label for="acidity-1">1</label>
+
+                                                    <input type="radio" name="acidity" id="acidity-2">
+                                                    <label for="acidity-2">2</label>
+
+                                                    <input type="radio" name="acidity" id="acidity-3">
+                                                    <label for="acidity-3">3</label>
+
+                                                    <input type="radio" name="acidity" id="acidity-4">
+                                                    <label for="acidity-4">4</label>
+
+                                                    <input type="radio" name="acidity" id="acidity-5">
+                                                    <label for="acidity-5">5</label>
                                                 </div>
                                             </div>
+
+                                            <div class="form-radio mb-3">
+                                                <p class="form-radio-title">당도(dry)</p>
+                                                <div class="form-radio-group">
+                                                    <input type="radio" name="dry" id="dry-1" checked>
+                                                    <label for="dry-1">1</label>
+
+                                                    <input type="radio" name="dry" id="dry-2">
+                                                    <label for="dry-2">2</label>
+
+                                                    <input type="radio" name="dry" id="dry-3">
+                                                    <label for="dry-3">3</label>
+
+                                                    <input type="radio" name="dry" id="dry-4">
+                                                    <label for="dry-4">4</label>
+
+                                                    <input type="radio" name="dry" id="dry-5">
+                                                    <label for="dry-5">5</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-select mb-3">
+                                                <p class="form-select-title">생산지</p>
+                                                <select th:name="country">
+                                                    <option>선택</option>
+                                                    <option th:each="val : ${countryEnumList}" th:value="${val?.code}" th:utext="${val?.description}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input class="form-control" id="countrydetails" type="text" placeholder="생산지 상세(영문)"/>
+                                                <label for="countrydetails">생산지 상세(영문)</label>
+                                            </div>
+
+                                            <!-- 품종 -->
+                                            <div class="form-select mb-3">
+                                                <p class="form-select-title">생산지</p>
+                                                <select th:name="country" onchange="handleOnChange(this)" multiple>
+                                                    <option th:each="val : ${countryEnumList}" th:value="${val?.code}" th:utext="${val?.description}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="form-select mb-3">
+                                                <p class="form-select-title">선택</p>
+                                                <div id="texts"></div>
+                                            </div>
+
                                             <div class="mt-4 mb-0">
-                                                <div class="d-grid"><a class="btn btn-primary btn-block"
-                                                                       href="login.html">등록</a></div>
+                                                <div class="d-grid"><a class="btn btn-primary btn-block">등록</a></div>
                                             </div>
                                         </form>
                                     </div>
-                                    <div class="card-footer text-center py-3">
-                                        <div class="small"><a href="#">구매 정보 조회 및 등록</a></div>
-                                    </div>
+<!--                                    <div class="card-footer text-center py-3">-->
+<!--                                        <div class="small"><a href="#">구매 정보 조회 및 등록</a></div>-->
+<!--                                    </div>-->
                                 </div>
                             </div>
                         </div>

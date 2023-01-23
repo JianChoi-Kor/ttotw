@@ -40,7 +40,9 @@ public class WineRequestDto {
         //생산지 상세(영문)
         private String countryDetails;
         //품종
-        private List<GrapeVarieties> grapeVarieties;
+        private List<GrapeVarieties> varieties;
+        //품종 상세
+        private String varietiesDetails;
     }
 
     @Getter

@@ -1,11 +1,17 @@
 package com.project.ttotw.controller;
 
+import com.project.ttotw.dto.EnumResDto;
 import com.project.ttotw.dto.WineRequestDto;
+import com.project.ttotw.enums.CountryOfOrigin;
+import com.project.ttotw.enums.WineGrade;
+import com.project.ttotw.enums.WineType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
@@ -28,7 +34,18 @@ public class WineController {
     public ModelAndView registerWine() {
         ModelAndView modelAndView = new ModelAndView("page/wine/wine_register");
 
-        //내려주는 데이터 grade, type, country, grapeVarieties 추가
+        //CountryOfOrigin Enum
+        List<EnumResDto.CommonEnumRes> countryEnumList = CountryOfOrigin.getEnumList();
+        modelAndView.addObject("countryEnumList", countryEnumList);
+
+        //WineGrad Enum
+        List<EnumResDto.CommonEnumRes> wineGradeEnumList = WineGrade.getEnumList();
+        modelAndView.addObject("wineGradeEnumList", wineGradeEnumList);
+
+        //WineType Enum
+        List<EnumResDto.CommonEnumRes> windTypeEnumList = WineType.getEnumList();
+        modelAndView.addObject("wineTypeEnumList", windTypeEnumList);
+
 
         return modelAndView;
     }
@@ -43,7 +60,17 @@ public class WineController {
     public ModelAndView modifyWine() {
         ModelAndView modelAndView = new ModelAndView("page/wine/wine_modify");
 
-        //내려주는 데이터 grade, type, country, grapeVarieties 추가
+        //CountryOfOrigin Enum
+        List<EnumResDto.CommonEnumRes> countryEnumList = CountryOfOrigin.getEnumList();
+        modelAndView.addObject("countryEnumList", countryEnumList);
+
+        //WineGrad Enum
+        List<EnumResDto.CommonEnumRes> wineGradeEnumList = WineGrade.getEnumList();
+        modelAndView.addObject("wineGradeEnumList", wineGradeEnumList);
+
+        //WineType Enum
+        List<EnumResDto.CommonEnumRes> windTypeEnumList = WineType.getEnumList();
+        modelAndView.addObject("wineTypeEnumList", windTypeEnumList);
 
         return modelAndView;
     }
