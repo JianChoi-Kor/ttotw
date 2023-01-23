@@ -2,21 +2,27 @@ package com.project.ttotw.controller;
 
 import com.project.ttotw.dto.EnumResDto;
 import com.project.ttotw.dto.WineRequestDto;
+import com.project.ttotw.entity.GrapeVarieties;
 import com.project.ttotw.enums.CountryOfOrigin;
 import com.project.ttotw.enums.WineGrade;
 import com.project.ttotw.enums.WineType;
+import com.project.ttotw.service.GrapeVarietiesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/wine")
 public class WineController {
+
+    private final GrapeVarietiesService grapeVarietiesService;
 
     @GetMapping("")
     public ModelAndView getWineList() {
@@ -46,13 +52,19 @@ public class WineController {
         List<EnumResDto.CommonEnumRes> windTypeEnumList = WineType.getEnumList();
         modelAndView.addObject("wineTypeEnumList", windTypeEnumList);
 
+        //grapeVarietiesList
+        List<GrapeVarieties> grapeVarietiesList = grapeVarietiesService.findAll();
+        List<EnumResDto.CommonGrapeVarietiesRes> commonGrapeVarietiesRes = grapeVarietiesList.stream()
+                .map(EnumResDto.CommonGrapeVarietiesRes::from)
+                .collect(Collectors.toList());
+        modelAndView.addObject("commonGrapeVarietiesRes", commonGrapeVarietiesRes);
 
         return modelAndView;
     }
 
     @ResponseBody
     @PostMapping("/register")
-    public ResponseEntity<?> registerWine(WineRequestDto.RegisterWine registerWine) {
+    public ResponseEntity<?> registerWine(@ModelAttribute WineRequestDto.RegisterWine registerWine, @RequestPart MultipartFile wineImage) {
         return ResponseEntity.ok().build();
     }
 

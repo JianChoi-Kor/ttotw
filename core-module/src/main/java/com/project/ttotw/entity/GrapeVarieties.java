@@ -1,5 +1,6 @@
 package com.project.ttotw.entity;
 
+import com.project.ttotw.dto.EnumResDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -7,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Table(name = "grape_variety")
+@Table(name = "grape_varieties")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,6 +30,6 @@ public class GrapeVarieties {
     private String koreanName;
 
     //설명
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", columnDefinition = "LONGTEXT", nullable = false)
     private String description;
 }

@@ -32,3 +32,7 @@ spring:
     suffix: .html
     cache: false
     check-template-location: true
+
+setup:
+  data:
+    grape-varieties: 0

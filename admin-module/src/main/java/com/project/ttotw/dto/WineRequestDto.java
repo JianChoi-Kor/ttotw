@@ -4,7 +4,9 @@ import com.project.ttotw.entity.GrapeVarieties;
 import com.project.ttotw.enums.CountryOfOrigin;
 import com.project.ttotw.enums.WineGrade;
 import com.project.ttotw.enums.WineType;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,8 +25,6 @@ public class WineRequestDto {
         private String originName;
         //제품명(한글)
         private String koreanName;
-        //와인 이미지
-        private MultipartFile multipartFile;
         //가격
         private Long price;
         //타닌

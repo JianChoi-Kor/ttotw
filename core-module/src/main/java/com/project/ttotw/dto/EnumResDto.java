@@ -1,9 +1,7 @@
 package com.project.ttotw.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.project.ttotw.entity.GrapeVarieties;
+import lombok.*;
 
 public class EnumResDto {
 
@@ -14,5 +12,22 @@ public class EnumResDto {
     public static class CommonEnumRes {
         private String code;
         private String description;
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Setter
+    @Getter
+    public static class CommonGrapeVarietiesRes {
+        private Long id;
+        private String originName;
+
+        public static EnumResDto.CommonGrapeVarietiesRes from(GrapeVarieties grapeVarieties) {
+            return EnumResDto.CommonGrapeVarietiesRes.builder()
+                    .id(grapeVarieties.getId())
+                    .originName(grapeVarieties.getOriginName())
+                    .build();
+        }
     }
 }
