@@ -46,7 +46,59 @@ function readImageFile(file) {
     }
 };
 
-function submit() {
+function registerSubmit() {
+    let registerWineForm = document.getElementById('registerWine');
+
+//    if (registerWineForm.koreanName.value == '') {
+//        alert("제품명(한글)을 입력해주세요.");
+//        return;
+//    }
+//    if (registerWineForm.originName.value == '') {
+//        alert("제품명(영문)을 입력해주세요.");
+//        return;
+//    }
+//    if (registerWineForm.grade.value == '선택') {
+//        alert("등급을 선택해주세요.");
+//        return;
+//    }
+//    if (registerWineForm.type.value == '선택') {
+//        alert("타입을 선택해주세요.");
+//        return;
+//    }
+//    if (registerWineForm.price.value == '') {
+//        alert("가격을 입력해주세요.");
+//        return;
+//    }
+//    if (registerWineForm.country.value == '선택') {
+//        alert("생산지를 선택해주세요.");
+//        return;
+//    }
+//    if (registerWineForm.countryDetails.value == '') {
+//        alert('생산지 상세(영문)을 입력해주세요.');
+//        return;
+//    }
+//    if (registerWineForm.varieties.value == '') {
+//        alert('품종을 선택해주세요.');
+//        return;
+//    }
+//    if (registerWineForm.varietiesDetails.value == '') {
+//        alert('품종 상세(영문)을 입력해주세요.');
+//        return;
+//    }
+//    if (registerWineForm.wineImage.value == '') {
+//        alert('와인 이미지를 등록해주세요.');
+//        return;
+//    }
+
+    const formData = new FormData(registerWineForm);
+    fetch("http://localhost:8901/wine/register", {
+        method: 'POST',
+        headers: {},
+        body: formData
+    });
+}
+
+function modifySubmit() {
     let registerWineForm = document.getElementById('registerWine');
 
     if (registerWineForm.koreanName.value == '') {

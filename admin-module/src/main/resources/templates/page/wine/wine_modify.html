@@ -5,14 +5,177 @@
       layout:decorate="~{layouts/default_layout}">
 <!-- head -->
 <head>
-
+    <script src="/js/wine.js" defer></script>
 </head>
 <!-- Content -->
 <div layout:fragment="content">
-    <div id="layoutSidenav_content">
         <div class="container-fluid px-4">
-            <h1>WineUpdate</h1>
+            <div id="layoutAuthentication">
+                <div id="layoutAuthentication_content">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-7 mw-600 mt-3 mb-3">
+                                <div class="card shadow-lg border-0 rounded-lg">
+                                    <div class="card-header"><h3 class="text-center font-weight-light my-1">와인 수정</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <form id="registerWine">
+                                            <div class="form-floating mb-3">
+                                                <input class="form-control" name="koreanName" id="koreanName" type="text" placeholder="제품명(한글)" />
+                                                <label for="koreanName">제품명(한글)</label>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input class="form-control" name="originName" id="originName" type="text" placeholder="제품명(영문)" />
+                                                <label for="originName">제품명(영문)</label>
+                                            </div>
+
+                                            <div class="form-select mb-3">
+                                                <p class="form-select-title">등급</p>
+                                                <select th:name="grade">
+                                                    <option>선택</option>
+                                                    <option th:each="val : ${wineGradeEnumList}" th:value="${val?.code}" th:utext="${val?.description}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="form-select mb-3">
+                                                <p class="form-select-title">타입</p>
+                                                <select th:name="type">
+                                                    <option>선택</option>
+                                                    <option th:each="val : ${wineTypeEnumList}" th:value="${val?.code}" th:utext="${val?.description}"></option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-floating mb-3">
+                                                <input class="form-control" name="price" id="price" type="number" placeholder="가격(원)" min="100" />
+                                                <label for="price">가격(원)</label>
+                                            </div>
+
+                                            <div class="form-radio mb-3 mt-3">
+                                                <p class="form-radio-title">타닌(tannin)</p>
+                                                <div class="form-radio-group">
+                                                    <input type="radio" name="tannin" id="tannin-1" value="1" checked>
+                                                    <label for="tannin-1">1</label>
+
+                                                    <input type="radio" name="tannin" id="tannin-2" value="2">
+                                                    <label for="tannin-2">2</label>
+
+                                                    <input type="radio" name="tannin" id="tannin-3" value="3">
+                                                    <label for="tannin-3">3</label>
+
+                                                    <input type="radio" name="tannin" id="tannin-4" value="4">
+                                                    <label for="tannin-4">4</label>
+
+                                                    <input type="radio" name="tannin" id="tannin-5" value="5">
+                                                    <label for="tannin-5">5</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-radio mb-3 mt-3">
+                                                <p class="form-radio-title">바디(body)</p>
+                                                <div class="form-radio-group">
+                                                    <input type="radio" name="body" id="body-1" value="1" checked>
+                                                    <label for="body-1">1</label>
+
+                                                    <input type="radio" name="body" id="body-2" value="2">
+                                                    <label for="body-2">2</label>
+
+                                                    <input type="radio" name="body" id="body-3" value="3">
+                                                    <label for="body-3">3</label>
+
+                                                    <input type="radio" name="body" id="body-4" value="4">
+                                                    <label for="body-4">4</label>
+
+                                                    <input type="radio" name="body" id="body-5" value="5">
+                                                    <label for="body-5">5</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-radio mb-3 mt-3">
+                                                <p class="form-radio-title">산미(acidity)</p>
+                                                <div class="form-radio-group">
+                                                    <input type="radio" name="acidity" id="acidity-1" value="1" checked>
+                                                    <label for="acidity-1">1</label>
+
+                                                    <input type="radio" name="acidity" id="acidity-2" value="2">
+                                                    <label for="acidity-2">2</label>
+
+                                                    <input type="radio" name="acidity" id="acidity-3" value="3">
+                                                    <label for="acidity-3">3</label>
+
+                                                    <input type="radio" name="acidity" id="acidity-4" value="4">
+                                                    <label for="acidity-4">4</label>
+
+                                                    <input type="radio" name="acidity" id="acidity-5" value="5">
+                                                    <label for="acidity-5">5</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-radio mb-3">
+                                                <p class="form-radio-title">당도(dry)</p>
+                                                <div class="form-radio-group">
+                                                    <input type="radio" name="dry" id="dry-1" value="1" checked>
+                                                    <label for="dry-1">1</label>
+
+                                                    <input type="radio" name="dry" id="dry-2" value="2">
+                                                    <label for="dry-2">2</label>
+
+                                                    <input type="radio" name="dry" id="dry-3" value="3">
+                                                    <label for="dry-3">3</label>
+
+                                                    <input type="radio" name="dry" id="dry-4" value="4">
+                                                    <label for="dry-4">4</label>
+
+                                                    <input type="radio" name="dry" id="dry-5" value="5">
+                                                    <label for="dry-5">5</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-select mb-3">
+                                                <p class="form-select-title">생산지</p>
+                                                <select th:name="country">
+                                                    <option>선택</option>
+                                                    <option th:each="val : ${countryEnumList}" th:value="${val?.code}" th:utext="${val?.description}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input class="form-control" name="countryDetails" id="countryDetails" type="text" placeholder="생산지 상세(영문)" />
+                                                <label for="countrydetails">생산지 상세(영문)</label>
+                                            </div>
+
+                                            <!-- 품종 -->
+                                            <div class="form-select mb-3">
+                                                <p class="form-select-title">품종</p>
+                                                <select th:name="varieties" onchange="handleOnChange(this)" multiple>
+                                                    <option th:each="val : ${commonGrapeVarietiesRes}" th:value="${val?.id}" th:utext="${val?.originName}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="form-select mb-3">
+                                                <p class="form-select-title">선택</p>
+                                                <div id="texts"></div>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input class="form-control" name="varietiesDetails" id="varietiesDetails" type="text" placeholder="품종 상세(영문)" />
+                                                <label for="varietiesDetails">품종 상세(영문)</label>
+                                            </div>
+
+                                            <div class="form-floating mb-3">
+                                                <input class="form-control" name="wineImage" id="wineImage" type="file" placeholder="와인 이미지" />
+                                                <label for="wineImage" style="margin-top: -5px;">와인 이미지</label>
+                                            </div>
+
+                                            <div class="mt-4 mb-0">
+                                                <div class="d-grid"><a class="btn btn-primary btn-block" onclick="modifySubmit()">수정</a></div>
+                                            </div>
+                                        </form>
+                                    </div>
+<!--                                    <div class="card-footer text-center py-3">-->
+<!--                                        <div class="small"><a href="#">구매 정보 조회 및 등록</a></div>-->
+<!--                                    </div>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 </div>
 </html>

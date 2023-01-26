@@ -6,14 +6,19 @@ import com.project.ttotw.entity.GrapeVarieties;
 import com.project.ttotw.enums.CountryOfOrigin;
 import com.project.ttotw.enums.WineGrade;
 import com.project.ttotw.enums.WineType;
+import com.project.ttotw.lib.ScriptUtils;
 import com.project.ttotw.service.GrapeVarietiesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,7 +69,11 @@ public class WineController {
 
     @ResponseBody
     @PostMapping("/register")
-    public ResponseEntity<?> registerWine(@ModelAttribute WineRequestDto.RegisterWine registerWine, @RequestPart MultipartFile wineImage) {
+    public ResponseEntity<?> registerWine(@ModelAttribute @Validated WineRequestDto.RegisterWine registerWine, Errors errors,
+                                          @RequestPart MultipartFile wineImage, HttpServletResponse response) throws IOException {
+        if(errors.hasErrors()) {
+
+        }
         return ResponseEntity.ok().build();
     }
 
@@ -83,6 +92,13 @@ public class WineController {
         //WineType Enum
         List<EnumResDto.CommonEnumRes> windTypeEnumList = WineType.getEnumList();
         modelAndView.addObject("wineTypeEnumList", windTypeEnumList);
+
+        //grapeVarietiesList
+        List<GrapeVarieties> grapeVarietiesList = grapeVarietiesService.findAll();
+        List<EnumResDto.CommonGrapeVarietiesRes> commonGrapeVarietiesRes = grapeVarietiesList.stream()
+                .map(EnumResDto.CommonGrapeVarietiesRes::from)
+                .collect(Collectors.toList());
+        modelAndView.addObject("commonGrapeVarietiesRes", commonGrapeVarietiesRes);
 
         return modelAndView;
     }
