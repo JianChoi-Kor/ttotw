@@ -95,7 +95,8 @@ function registerSubmit() {
         method: 'POST',
         headers: {},
         body: formData
-    });
+    })
+    .then((response) => console.log(response.json()));
 }
 
 function modifySubmit() {

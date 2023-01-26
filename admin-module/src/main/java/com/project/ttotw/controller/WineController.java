@@ -72,7 +72,7 @@ public class WineController {
     public ResponseEntity<?> registerWine(@ModelAttribute @Validated WineRequestDto.RegisterWine registerWine, Errors errors,
                                           @RequestPart MultipartFile wineImage, HttpServletResponse response) throws IOException {
         if(errors.hasErrors()) {
-
+            return ResponseEntity.badRequest().body(errors.getFieldErrors().get(0).getDefaultMessage());
         }
         return ResponseEntity.ok().build();
     }
