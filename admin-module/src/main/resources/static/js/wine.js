@@ -96,7 +96,17 @@ function registerSubmit() {
         headers: {},
         body: formData
     })
-    .then((response) => console.log(response.json()));
+    .then((res) => {
+        console.log(res);
+        if(res.status === 200) {
+            confirm("등록에 성공했습니다.");
+            location.href='/wine';
+        } else if(res.status === 400) {
+            alert("잘못되 요청값이 존재합니다.");
+        } else {
+            console.log("else");
+        }
+    }).catch(err => console.log("err: " + err));
 }
 
 function modifySubmit() {

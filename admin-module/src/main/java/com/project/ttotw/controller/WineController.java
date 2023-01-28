@@ -6,8 +6,8 @@ import com.project.ttotw.entity.GrapeVarieties;
 import com.project.ttotw.enums.CountryOfOrigin;
 import com.project.ttotw.enums.WineGrade;
 import com.project.ttotw.enums.WineType;
-import com.project.ttotw.lib.ScriptUtils;
 import com.project.ttotw.service.GrapeVarietiesService;
+import com.project.ttotw.service.WineService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +24,7 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/wine")
 public class WineController {
-
+    private final WineService wineService;
     private final GrapeVarietiesService grapeVarietiesService;
 
     @GetMapping("")
@@ -68,12 +66,20 @@ public class WineController {
     }
 
     @ResponseBody
-    @PostMapping("/register")
+    @PostMapping(value = "/register")
     public ResponseEntity<?> registerWine(@ModelAttribute @Validated WineRequestDto.RegisterWine registerWine, Errors errors,
-                                          @RequestPart MultipartFile wineImage, HttpServletResponse response) throws IOException {
-        if(errors.hasErrors()) {
-            return ResponseEntity.badRequest().body(errors.getFieldErrors().get(0).getDefaultMessage());
+                                          @RequestPart MultipartFile wineImage) {
+        if (errors.hasErrors() || wineImage == null) {
+            return ResponseEntity.badRequest().build();
         }
+
+        try {
+            //register wine
+            wineService.registerWine(registerWine, wineImage);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+
         return ResponseEntity.ok().build();
     }
 
