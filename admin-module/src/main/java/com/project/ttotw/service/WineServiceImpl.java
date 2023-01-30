@@ -5,6 +5,7 @@ import com.project.ttotw.entity.Wine;
 import com.project.ttotw.lib.FtpUtils;
 import com.project.ttotw.repository.WineRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,12 +17,13 @@ public class WineServiceImpl implements WineService {
 
     private final WineRepository wineRepository;
 
-    private final FtpUtils ftpUtils = new FtpUtils();
+    private final FtpUtils ftpUtils;
 
     @Override
     public void registerWine(WineRequestDto.RegisterWine registerWine, MultipartFile wineImage) throws IOException {
         //파일 등록
-        ftpUtils.open();
+        ftpUtils.upload(wineImage);
+
 //        //와인 등록
 //        Wine wine = Wine.builder()
 //                .grade(registerWine.getGrade())
