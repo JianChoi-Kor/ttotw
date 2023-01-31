@@ -96,7 +96,7 @@ public class FtpUtils {
     public void delete(String filePath) {
         open();
         try {
-            ftp.deleteFile(null);
+            ftp.deleteFile(filePath);
         } catch (IOException e) {
             e.printStackTrace();
             log.error("");
