@@ -1,13 +1,11 @@
 package com.project.ttotw.lib;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,11 +24,14 @@ public class FtpUtils {
     private String username;
     @Value("${ttotw.ftp.password}")
     private String password;
+    @Value("${ttotw.ftp.documentRoot}")
+    private String fileServerDocumentRoot;
+
     private FTPClient ftp;
 
     //constructor (need set value)
 
-    public void open() {
+    private void open() {
         ftp = new FTPClient();
         //default controlEncoding 값이 "ISO-8859-1" 때문에 한글 파일의 경우 파일명이 깨짐
         //ftp server 에 저장될 파일명을 uuid 등의 방식으로 한글을 사용하지 않고 저장할 경우 UTF-8 설정이 따로 필요하지 않다.
@@ -46,7 +47,7 @@ public class FtpUtils {
             int reply = ftp.getReplyCode();
             if (!FTPReply.isPositiveCompletion(reply)) {
                 ftp.disconnect();
-                log.error("");
+                log.error("FTPClient server connection failed.");
             }
 
             //socketTimeout 값 설정
@@ -55,23 +56,28 @@ public class FtpUtils {
             ftp.login(username, password);
             //file type 설정 (default FTP.ASCII_FILE_TYPE)
             ftp.setFileType(FTP.BINARY_FILE_TYPE);
+
+            if (!ftp.changeWorkingDirectory(fileServerDocumentRoot)) {
+                log.info("");
+            }
+
         } catch (IOException e) {
+            log.error("FTPClient server connection failed.");
             e.printStackTrace();
-            log.error("");
         }
     }
 
-    public void close() {
+    private void close() {
         try {
             ftp.logout();
             ftp.disconnect();
         } catch (IOException e) {
+            log.error("FTPClient server close failed.");
             e.printStackTrace();
-            log.error("");
         }
     }
 
-    //단일 업로드(기본)
+    //단일 업로드
     public void upload(MultipartFile file) {
         open();
         InputStream inputStream = null;
@@ -79,14 +85,14 @@ public class FtpUtils {
             inputStream = file.getInputStream();
             ftp.storeFile(file.getOriginalFilename(), inputStream);
         } catch (IOException e) {
+            log.error("FTPClient file upload failed.");
             e.printStackTrace();
-            log.error("");
         } finally {
             try {
                 inputStream.close();
             } catch (IOException e) {
+                log.error("FTPClient inputStream close failed.");
                 e.printStackTrace();
-                log.error("");
             }
             close();
         }
@@ -98,8 +104,8 @@ public class FtpUtils {
         try {
             ftp.deleteFile(filePath);
         } catch (IOException e) {
+            log.error("FTPClient file delete failed.");
             e.printStackTrace();
-            log.error("");
         } finally {
             close();
         }
