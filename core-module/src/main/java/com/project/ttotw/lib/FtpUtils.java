@@ -12,6 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 @Component
 @Slf4j
@@ -26,6 +29,8 @@ public class FtpUtils {
     private String password;
     @Value("${ttotw.ftp.documentRoot}")
     private String fileServerDocumentRoot;
+
+    private final String SEPARATOR = "/";
 
     private FTPClient ftp;
 
@@ -47,22 +52,18 @@ public class FtpUtils {
             int reply = ftp.getReplyCode();
             if (!FTPReply.isPositiveCompletion(reply)) {
                 ftp.disconnect();
-                log.error("FTPClient server connection failed.");
+                log.error("FTPClient:: server connection failed.");
             }
 
             //socketTimeout 값 설정
-            ftp.setSoTimeout(1000);
+            ftp.setSoTimeout(10000);
             //ftp 서버 로그인
             ftp.login(username, password);
             //file type 설정 (default FTP.ASCII_FILE_TYPE)
             ftp.setFileType(FTP.BINARY_FILE_TYPE);
 
-            if (!ftp.changeWorkingDirectory(fileServerDocumentRoot)) {
-                log.info("");
-            }
-
         } catch (IOException e) {
-            log.error("FTPClient server connection failed.");
+            log.error("FTPClient:: server connection failed.");
             e.printStackTrace();
         }
     }
@@ -72,26 +73,40 @@ public class FtpUtils {
             ftp.logout();
             ftp.disconnect();
         } catch (IOException e) {
-            log.error("FTPClient server close failed.");
+            log.error("FTPClient:: server close failed.");
             e.printStackTrace();
         }
     }
 
     //단일 업로드
-    public void upload(MultipartFile file) {
+    public void upload(String firstDirectory, MultipartFile file) {
         open();
         InputStream inputStream = null;
         try {
+            //directory to store files for today's date
+            String yyyyMMdd = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+            //first directory path
+            String firstDirectoryPath = fileServerDocumentRoot + SEPARATOR + firstDirectory;
+            //upload directory path
+            String uploadDirectoryPath = fileServerDocumentRoot + SEPARATOR + firstDirectory + SEPARATOR + yyyyMMdd;
+
+            //create directory
+            createDirectory(firstDirectoryPath, uploadDirectoryPath);
+
+            //create uuid file name
+            String uuidFileName = UUID.randomUUID().toString();
+
+
             inputStream = file.getInputStream();
-            ftp.storeFile(file.getOriginalFilename(), inputStream);
+            ftp.storeFile(uploadDirectoryPath + SEPARATOR + uuidFileName, inputStream);
         } catch (IOException e) {
-            log.error("FTPClient file upload failed.");
+            log.error("FTPClient:: file upload failed.");
             e.printStackTrace();
         } finally {
             try {
                 inputStream.close();
             } catch (IOException e) {
-                log.error("FTPClient inputStream close failed.");
+                log.error("FTPClient:: inputStream close failed.");
                 e.printStackTrace();
             }
             close();
@@ -104,7 +119,7 @@ public class FtpUtils {
         try {
             ftp.deleteFile(filePath);
         } catch (IOException e) {
-            log.error("FTPClient file delete failed.");
+            log.error("FTPClient:: file delete failed.");
             e.printStackTrace();
         } finally {
             close();
@@ -116,4 +131,19 @@ public class FtpUtils {
     //다운로드
 
     //폴더 생성
+    private void createDirectory(String firstDirectoryPath, String uploadPath) throws IOException {
+        //check document root
+        if (!ftp.changeWorkingDirectory(fileServerDocumentRoot)) {
+            log.error("FTPClient:: server doesn't exists root directory");
+            throw new IOException();
+        }
+
+        //directory check, if not exists create
+        if (!ftp.changeWorkingDirectory(firstDirectoryPath)) {
+            ftp.makeDirectory(firstDirectoryPath);
+        }
+        if (!ftp.changeWorkingDirectory(uploadPath)) {
+            ftp.makeDirectory(uploadPath);
+        }
+    }
 }
