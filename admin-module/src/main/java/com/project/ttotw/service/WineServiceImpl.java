@@ -1,6 +1,7 @@
 package com.project.ttotw.service;
 
 import com.project.ttotw.dto.WineRequestDto;
+import com.project.ttotw.enums.FileDirectory;
 import com.project.ttotw.lib.FtpUtils;
 import com.project.ttotw.repository.WineRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ public class WineServiceImpl implements WineService {
     @Override
     public void registerWine(WineRequestDto.RegisterWine registerWine, MultipartFile wineImage) throws IOException {
         //파일 등록
-        ftpUtils.upload("first", wineImage);
+        ftpUtils.upload(FileDirectory.WINE.getDirectoryName(), wineImage);
 
 //        //와인 등록
 //        Wine wine = Wine.builder()
