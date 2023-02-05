@@ -96,7 +96,6 @@ public class FtpUtils {
             //create uuid file name
             String uuidFileName = UUID.randomUUID().toString();
 
-
             inputStream = file.getInputStream();
             ftp.storeFile(uploadDirectoryPath + SEPARATOR + uuidFileName, inputStream);
         } catch (IOException e) {
