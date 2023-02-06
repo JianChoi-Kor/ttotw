@@ -7,6 +7,7 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -31,6 +32,7 @@ public class FtpUtils {
     private String fileServerDocumentRoot;
 
     private final String SEPARATOR = "/";
+    private final String PERIOD = ".";
 
     private FTPClient ftp;
 
@@ -95,9 +97,11 @@ public class FtpUtils {
 
             //create uuid file name
             String uuidFileName = UUID.randomUUID().toString();
+            //file extension
+            String fileExtension = StringUtils.getFilenameExtension(file.getOriginalFilename());
 
             inputStream = file.getInputStream();
-            ftp.storeFile(uploadDirectoryPath + SEPARATOR + uuidFileName, inputStream);
+            ftp.storeFile(uploadDirectoryPath + SEPARATOR + uuidFileName + PERIOD + fileExtension, inputStream);
         } catch (IOException e) {
             log.error("FTPClient:: file upload failed.");
             e.printStackTrace();
