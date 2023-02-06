@@ -32,10 +32,6 @@ public class File extends BaseDateEntity {
     @Column(name = "saved_path", nullable = false)
     private String savedPath;
 
-    //파일 크기
-    @Column(name = "file_size", nullable = false)
-    private Integer fileSize;
-
     //파일 확장자
     @Column(name = "file_ext", nullable = false)
     private String fileExt;

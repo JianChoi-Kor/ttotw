@@ -1,5 +1,6 @@
 package com.project.ttotw.lib;
 
+import com.project.ttotw.entity.File;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTP;
@@ -81,9 +82,15 @@ public class FtpUtils {
     }
 
     //단일 업로드
-    public void upload(String firstDirectory, MultipartFile file) {
+    public File upload(String firstDirectory, MultipartFile file) {
         open();
         InputStream inputStream = null;
+
+        String originName = StringUtils.getFilename(file.getOriginalFilename());
+        String savedName = "";
+        String savedPath = "";
+        String extension = "";
+
         try {
             //directory to store files for today's date
             String yyyyMMdd = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
@@ -91,14 +98,18 @@ public class FtpUtils {
             String firstDirectoryPath = fileServerDocumentRoot + SEPARATOR + firstDirectory;
             //upload directory path
             String uploadDirectoryPath = fileServerDocumentRoot + SEPARATOR + firstDirectory + SEPARATOR + yyyyMMdd;
+            savedPath = uploadDirectoryPath;
 
             //create directory
             createDirectory(firstDirectoryPath, uploadDirectoryPath);
 
             //create uuid file name
             String uuidFileName = UUID.randomUUID().toString();
+            savedName = uuidFileName;
+
             //file extension
             String fileExtension = StringUtils.getFilenameExtension(file.getOriginalFilename());
+            extension = fileExtension;
 
             inputStream = file.getInputStream();
             ftp.storeFile(uploadDirectoryPath + SEPARATOR + uuidFileName + PERIOD + fileExtension, inputStream);
@@ -114,6 +125,16 @@ public class FtpUtils {
             }
             close();
         }
+
+        File imageFile = File.builder()
+                .originName(originName)
+                .savedName(savedName)
+                .savedPath(savedPath)
+                .fileExt(extension)
+                .useAt(true)
+                .build();
+
+        return imageFile;
     }
 
     //파일 삭제
