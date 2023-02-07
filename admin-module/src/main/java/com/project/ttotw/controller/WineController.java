@@ -69,9 +69,9 @@ public class WineController {
     @PostMapping(value = "/register")
     public ResponseEntity<?> registerWine(@ModelAttribute @Validated WineRequestDto.RegisterWine registerWine, Errors errors,
                                           @RequestPart MultipartFile wineImage) {
-//        if (errors.hasErrors() || wineImage == null) {
-//            return ResponseEntity.badRequest().build();
-//        }
+        if (errors.hasErrors() || wineImage == null) {
+            return ResponseEntity.badRequest().build();
+        }
 
         wineService.registerWine(registerWine, wineImage);
 
