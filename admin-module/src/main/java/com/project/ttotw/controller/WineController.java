@@ -73,12 +73,7 @@ public class WineController {
 //            return ResponseEntity.badRequest().build();
 //        }
 
-        try {
-            //register wine
-            wineService.registerWine(registerWine, wineImage);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        wineService.registerWine(registerWine, wineImage);
 
         return ResponseEntity.ok().build();
     }

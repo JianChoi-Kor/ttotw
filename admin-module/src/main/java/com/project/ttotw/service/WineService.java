@@ -7,5 +7,5 @@ import java.io.IOException;
 
 public interface WineService {
 
-    void registerWine(WineRequestDto.RegisterWine registerWine, MultipartFile wineImage) throws IOException;
+    void registerWine(WineRequestDto.RegisterWine registerWine, MultipartFile wineImage);
 }

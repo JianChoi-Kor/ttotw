@@ -35,7 +35,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             return;
         }
 
-        System.out.println("needUpdate : " + needUpdate);
         //update grapeVarieties
         if (needUpdate) {
             updateGrapeVarieties();

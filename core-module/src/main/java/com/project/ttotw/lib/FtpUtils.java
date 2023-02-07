@@ -170,4 +170,8 @@ public class FtpUtils {
             ftp.makeDirectory(uploadPath);
         }
     }
+
+    public String fullFilePath(File file) {
+        return file.getSavedPath() + SEPARATOR + file.getSavedName() + PERIOD + file.getFileExt();
+    }
 }
