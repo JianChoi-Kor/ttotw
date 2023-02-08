@@ -1,6 +1,7 @@
 package com.project.ttotw.service;
 
 import com.project.ttotw.dto.WineRequestDto;
+import com.project.ttotw.dto.WineResponseDto;
 import com.project.ttotw.entity.File;
 import com.project.ttotw.entity.Wine;
 import com.project.ttotw.enums.FileDirectory;
@@ -8,6 +9,8 @@ import com.project.ttotw.lib.FtpUtils;
 import com.project.ttotw.repository.FileRepository;
 import com.project.ttotw.repository.WineRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,7 +40,7 @@ public class WineServiceImpl implements WineService {
                     .type(registerWine.getType())
                     .originName(registerWine.getOriginName())
                     .koreanName(registerWine.getKoreanName())
-                    .fileId(file.getId())
+                    .file(file)
                     .minPrice(registerWine.getPrice())
                     .maxPrice(registerWine.getPrice())
                     .tannin(registerWine.getTannin())
@@ -58,5 +61,15 @@ public class WineServiceImpl implements WineService {
             //TODO:: customException 변경
             throw new RuntimeException("register wine failed.");
         }
+    }
+
+    @Override
+    public Page<WineResponseDto.WindListView> getWineList(Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public WineResponseDto.WineDetailsView getWineDetails(Long id) {
+        return null;
     }
 }

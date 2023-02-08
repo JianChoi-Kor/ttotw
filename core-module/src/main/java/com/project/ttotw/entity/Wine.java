@@ -43,8 +43,9 @@ public class Wine extends BaseDateEntity {
     @Column(name = "korean_name", nullable = false)
     private String koreanName;
 
-    @Column(name = "file_id")
-    private Long fileId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "file_fk", nullable = false)
+    private File file;
 
     //최소 가격
     @Column(name = "min_price", nullable = false)
@@ -71,6 +72,7 @@ public class Wine extends BaseDateEntity {
     private Integer dry;
 
     //생산지 분류
+    @Enumerated(EnumType.STRING)
     @Column(name = "country", nullable = false)
     private CountryOfOrigin country;
 
