@@ -6,9 +6,11 @@ import com.project.ttotw.enums.WineGrade;
 import com.project.ttotw.enums.WineType;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 public class WineRequestDto {

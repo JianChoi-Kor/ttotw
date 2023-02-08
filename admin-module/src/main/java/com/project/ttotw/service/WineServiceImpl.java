@@ -65,11 +65,14 @@ public class WineServiceImpl implements WineService {
 
     @Override
     public Page<WineResponseDto.WindListView> getWineList(Pageable pageable) {
+
+
         return null;
     }
 
     @Override
     public WineResponseDto.WineDetailsView getWineDetails(Long id) {
-        return null;
+        Wine wine = wineRepository.findById(id).orElse(null);
+        return WineResponseDto.WineDetailsView.from(wine);
     }
 }

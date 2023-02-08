@@ -1,7 +1,9 @@
 package com.project.ttotw.controller;
 
 import com.project.ttotw.dto.EnumResDto;
+import com.project.ttotw.dto.PageRequest;
 import com.project.ttotw.dto.WineRequestDto;
+import com.project.ttotw.dto.WineResponseDto;
 import com.project.ttotw.entity.GrapeVarieties;
 import com.project.ttotw.enums.CountryOfOrigin;
 import com.project.ttotw.enums.WineGrade;
@@ -9,6 +11,7 @@ import com.project.ttotw.enums.WineType;
 import com.project.ttotw.service.GrapeVarietiesService;
 import com.project.ttotw.service.WineService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
@@ -28,14 +31,22 @@ public class WineController {
     private final GrapeVarietiesService grapeVarietiesService;
 
     @GetMapping("")
-    public ModelAndView getWineList() {
+    public ModelAndView getWineList(PageRequest pageRequest) {
         ModelAndView modelAndView = new ModelAndView("page/wine/wine_list");
+
+        Page<WineResponseDto.WindListView> result = wineService.getWineList(pageRequest.of());
+        modelAndView.addObject("result", result);
+
         return modelAndView;
     }
 
     @GetMapping("/{id}")
-    public ModelAndView getWineDetail(@PathVariable Long id) {
+    public ModelAndView getWineDetails(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("page/wine/wine_list");
+
+        WineResponseDto.WineDetailsView result = wineService.getWineDetails(id);
+        modelAndView.addObject("result", result);
+
         return modelAndView;
     }
 
@@ -78,35 +89,35 @@ public class WineController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/modify")
-    public ModelAndView modifyWine() {
-        ModelAndView modelAndView = new ModelAndView("page/wine/wine_modify");
-
-        //CountryOfOrigin Enum
-        List<EnumResDto.CommonEnumRes> countryEnumList = CountryOfOrigin.getEnumList();
-        modelAndView.addObject("countryEnumList", countryEnumList);
-
-        //WineGrad Enum
-        List<EnumResDto.CommonEnumRes> wineGradeEnumList = WineGrade.getEnumList();
-        modelAndView.addObject("wineGradeEnumList", wineGradeEnumList);
-
-        //WineType Enum
-        List<EnumResDto.CommonEnumRes> windTypeEnumList = WineType.getEnumList();
-        modelAndView.addObject("wineTypeEnumList", windTypeEnumList);
-
-        //grapeVarietiesList
-        List<GrapeVarieties> grapeVarietiesList = grapeVarietiesService.findAll();
-        List<EnumResDto.CommonGrapeVarietiesRes> commonGrapeVarietiesRes = grapeVarietiesList.stream()
-                .map(EnumResDto.CommonGrapeVarietiesRes::from)
-                .collect(Collectors.toList());
-        modelAndView.addObject("commonGrapeVarietiesRes", commonGrapeVarietiesRes);
-
-        return modelAndView;
-    }
-
-    @ResponseBody
-    @PostMapping("/modify")
-    public ResponseEntity<?> modifyWine(WineRequestDto.ModifyWine modifyWine) {
-        return ResponseEntity.ok().build();
-    }
+//    @GetMapping("/modify")
+//    public ModelAndView modifyWine() {
+//        ModelAndView modelAndView = new ModelAndView("page/wine/wine_modify");
+//
+//        //CountryOfOrigin Enum
+//        List<EnumResDto.CommonEnumRes> countryEnumList = CountryOfOrigin.getEnumList();
+//        modelAndView.addObject("countryEnumList", countryEnumList);
+//
+//        //WineGrad Enum
+//        List<EnumResDto.CommonEnumRes> wineGradeEnumList = WineGrade.getEnumList();
+//        modelAndView.addObject("wineGradeEnumList", wineGradeEnumList);
+//
+//        //WineType Enum
+//        List<EnumResDto.CommonEnumRes> windTypeEnumList = WineType.getEnumList();
+//        modelAndView.addObject("wineTypeEnumList", windTypeEnumList);
+//
+//        //grapeVarietiesList
+//        List<GrapeVarieties> grapeVarietiesList = grapeVarietiesService.findAll();
+//        List<EnumResDto.CommonGrapeVarietiesRes> commonGrapeVarietiesRes = grapeVarietiesList.stream()
+//                .map(EnumResDto.CommonGrapeVarietiesRes::from)
+//                .collect(Collectors.toList());
+//        modelAndView.addObject("commonGrapeVarietiesRes", commonGrapeVarietiesRes);
+//
+//        return modelAndView;
+//    }
+//
+//    @ResponseBody
+//    @PostMapping("/modify")
+//    public ResponseEntity<?> modifyWine(WineRequestDto.ModifyWine modifyWine) {
+//        return ResponseEntity.ok().build();
+//    }
 }
