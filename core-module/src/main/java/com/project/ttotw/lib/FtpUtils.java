@@ -84,14 +84,13 @@ public class FtpUtils {
     //단일 업로드
     public File upload(String firstDirectory, MultipartFile file) {
         open();
-        InputStream inputStream = null;
 
         String originName = StringUtils.getFilename(file.getOriginalFilename());
         String savedName = "";
         String savedPath = "";
         String extension = "";
 
-        try {
+        try (InputStream inputStream = file.getInputStream()){
             //directory to store files for today's date
             String yyyyMMdd = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
             //first directory path
@@ -111,18 +110,11 @@ public class FtpUtils {
             String fileExtension = StringUtils.getFilenameExtension(file.getOriginalFilename());
             extension = fileExtension;
 
-            inputStream = file.getInputStream();
             ftp.storeFile(uploadDirectoryPath + SEPARATOR + uuidFileName + PERIOD + fileExtension, inputStream);
         } catch (IOException e) {
             log.error("FTPClient:: file upload failed.");
             e.printStackTrace();
         } finally {
-            try {
-                inputStream.close();
-            } catch (IOException e) {
-                log.error("FTPClient:: inputStream close failed.");
-                e.printStackTrace();
-            }
             close();
         }
 
