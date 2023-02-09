@@ -10,11 +10,15 @@ import com.project.ttotw.repository.FileRepository;
 import com.project.ttotw.repository.WineRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -64,10 +68,19 @@ public class WineServiceImpl implements WineService {
     }
 
     @Override
-    public Page<WineResponseDto.WindListView> getWineList(Pageable pageable) {
+    public Page<WineResponseDto.WineListView> getWineList(Pageable pageable) {
+        Page<Wine> wineList = wineRepository.findAll(pageable);
+        List<WineResponseDto.WineListView> content = new ArrayList<>();
+        if (wineList.getContent().isEmpty()) {
+            return new PageImpl<>(content, pageable, wineList.getTotalElements());
+        }
 
+        content = wineList.getContent()
+                .stream()
+                .map(WineResponseDto.WineListView::from)
+                .collect(Collectors.toList());
 
-        return null;
+        return new PageImpl<>(content, pageable, wineList.getTotalElements());
     }
 
     @Override

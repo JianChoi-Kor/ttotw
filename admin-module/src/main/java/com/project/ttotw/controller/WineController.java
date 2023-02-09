@@ -34,7 +34,7 @@ public class WineController {
     public ModelAndView getWineList(PageRequest pageRequest) {
         ModelAndView modelAndView = new ModelAndView("page/wine/wine_list");
 
-        Page<WineResponseDto.WindListView> result = wineService.getWineList(pageRequest.of());
+        Page<WineResponseDto.WineListView> result = wineService.getWineList(pageRequest.of());
         modelAndView.addObject("result", result);
 
         return modelAndView;

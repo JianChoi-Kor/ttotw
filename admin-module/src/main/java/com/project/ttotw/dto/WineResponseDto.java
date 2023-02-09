@@ -16,7 +16,7 @@ public class WineResponseDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    public static class WindListView {
+    public static class WineListView {
 
         private Long id;
         private String grade;
@@ -29,7 +29,28 @@ public class WineResponseDto {
         private String country;
 
         @SuppressWarnings("unused")
-        private WindListView() {
+        private WineListView() {
+        }
+
+        public static WineListView from(Wine wine) {
+
+            File file = wine.getFile();
+            final String SEPARATOR = "/";
+            final String PERIOD = ".";
+
+            String fullFilePath = file.getSavedPath() + SEPARATOR + file.getSavedName() + PERIOD + file.getFileExt();
+
+            return WineListView.builder()
+                    .id(wine.getId())
+                    .grade(wine.getGrade().name())
+                    .type(wine.getType().name())
+                    .originName(wine.getOriginName())
+                    .koreanName(wine.getKoreanName())
+                    .fileFullPath(fullFilePath)
+                    .minPrice(wine.getMinPrice())
+                    .maxPrice(wine.getMaxPrice())
+                    .country(wine.getCountry().getEnglishName())
+                    .build();
         }
     }
 

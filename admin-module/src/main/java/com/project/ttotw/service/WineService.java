@@ -10,7 +10,7 @@ public interface WineService {
 
     void registerWine(WineRequestDto.RegisterWine registerWine, MultipartFile wineImage);
 
-    Page<WineResponseDto.WindListView> getWineList(Pageable pageable);
+    Page<WineResponseDto.WineListView> getWineList(Pageable pageable);
 
     WineResponseDto.WineDetailsView getWineDetails(Long id);
 }
