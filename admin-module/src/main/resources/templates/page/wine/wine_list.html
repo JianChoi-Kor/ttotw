@@ -5,65 +5,67 @@
       layout:decorate="~{layouts/default_layout}">
 <!-- head -->
 <head>
-
+    <link href="/css/table.css" rel="stylesheet" />
+    <script src="/js/table.js" defer></script>
 </head>
 <!-- Content -->
 <div layout:fragment="content" class="container-fluid px-4">
-    <h1 class="mt-4">와인 리스트</h1>
-<!--    <ol class="breadcrumb mb-4">-->
-<!--        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>-->
-<!--        <li class="breadcrumb-item active">Tables</li>-->
-<!--    </ol>-->
-<!--    <div class="card mb-4">-->
-<!--        <div class="card-body">-->
-<!--            DataTables is a third party plugin that is used to generate the demo table below. For more information-->
-<!--            about DataTables, please visit the-->
-<!--            <a target="_blank" href="https://datatables.net/">official DataTables documentation</a>-->
-<!--            .-->
-<!--        </div>-->
-<!--    </div>-->
-    <div class="card mb-4">
-        <div class="card-header">
-            <i class="fas fa-table me-1"></i>
-            Wine List
-        </div>
-        <div class="card-body">
-            <table id="datatablesSimple">
-                <thead>
-                <tr>
-                    <th>타입</th>
-                    <th>제품명(영문)</th>
-                    <th>제품명(한글)</th>
-                    <th>Image</th>
-                    <th>최저 가격</th>
-                    <th>최고 가격</th>
-                    <th>생산지</th>
-                </tr>
-                </thead>
-                <tfoot>
-                <tr>
-                    <th>타입</th>
-                    <th>제품명(영문)</th>
-                    <th>제품명(한글)</th>
-                    <th>Image</th>
-                    <th>최저 가격</th>
-                    <th>최고 가격</th>
-                    <th>생산지</th>
-                </tr>
-                </tfoot>
-                <tbody>
-                <tr>
-                    <td>레드와인</td>
-                    <td>wine</td>
-                    <td>와인</td>
-                    <td>/test.jpg</td>
-                    <td>100원</td>
-                    <td>1,000원</td>
-                    <td>프랑스</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <h2 class="mt-4">와인 리스트</h2>
+
+    <table>
+        <colgroup>
+            <col width="15%">
+            <col width="20%">
+            <col width="20%">
+            <col width="6%">
+            <col width="12%">
+            <col width="12%">
+            <col width="15%">
+        </colgroup>
+        <thead>
+        <tr>
+            <th>타입</th>
+            <th>제품명(영문)</th>
+            <th>제품명(한글)</th>
+            <th>Image</th>
+            <th>최저 가격</th>
+            <th>최고 가격</th>
+            <th>생산지</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:if="${result.empty}">
+            <tr>
+                <td colspan="7">null</td>
+            </tr>
+        </th:block>
+        <th:block th:unless="${result.empty}">
+            <tr th:each="item : ${result.content}">
+                <td th:text="${item.type}"></td>
+                <td th:text="${item.originName}"></td>
+                <td th:text="${item.koreanName}"></td>
+                <td th:text="${item.fileFullPath}"></td>
+                <td th:text="${item.minPrice}"></td>
+                <td th:text="${item.maxPrice}"></td>
+                <td th:text="${item.country}"></td>
+            </tr>
+
+            <input id="total-elements" th:value="${result.totalElements}" hidden>
+            <input id="total-pages" th:value="${result.totalPages}" hidden>
+        </th:block>
+        </tbody>
+    </table>
+
+    <nav class="pagination-container">
+        <button class="pagination-button" id="prev-button" aria-label="Previous page" title="Previous page">
+            &lt;
+        </button>
+
+        <div id="pagination-numbers"></div>
+
+        <button class="pagination-button" id="next-button" aria-label="Next page" title="Next page">
+            &gt;
+        </button>
+    </nav>
 </div>
 </html>
