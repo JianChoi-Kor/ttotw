@@ -1,7 +1,6 @@
 package com.project.ttotw.controller;
 
 import com.project.ttotw.dto.EnumResDto;
-import com.project.ttotw.dto.PageRequest;
 import com.project.ttotw.dto.WineRequestDto;
 import com.project.ttotw.dto.WineResponseDto;
 import com.project.ttotw.entity.GrapeVarieties;
@@ -31,10 +30,10 @@ public class WineController {
     private final GrapeVarietiesService grapeVarietiesService;
 
     @GetMapping("")
-    public ModelAndView getWineList(PageRequest pageRequest) {
+    public ModelAndView getWineList(WineRequestDto.SearchWineList searchWineList) {
         ModelAndView modelAndView = new ModelAndView("page/wine/wine_list");
 
-        Page<WineResponseDto.WineListView> result = wineService.getWineList(pageRequest.of());
+        Page<WineResponseDto.WineListView> result = wineService.getWineList(searchWineList);
         modelAndView.addObject("result", result);
 
         return modelAndView;

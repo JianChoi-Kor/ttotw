@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
@@ -68,8 +69,16 @@ public class WineServiceImpl implements WineService {
     }
 
     @Override
-    public Page<WineResponseDto.WineListView> getWineList(Pageable pageable) {
-        Page<Wine> wineList = wineRepository.findAll(pageable);
+    public Page<WineResponseDto.WineListView> getWineList(WineRequestDto.SearchWineList searchWineList) {
+        Pageable pageable = searchWineList.of();
+
+        Page<Wine> wineList;
+        if (StringUtils.hasText(searchWineList.getKeyword())) {
+            wineList = wineRepository.findByOriginNameContainingOrKoreanNameContaining(searchWineList.getKeyword(), searchWineList.getKeyword(), pageable);
+        } else {
+            wineList = wineRepository.findAll(pageable);
+        }
+
         List<WineResponseDto.WineListView> content = new ArrayList<>();
         if (wineList.getContent().isEmpty()) {
             return new PageImpl<>(content, pageable, wineList.getTotalElements());

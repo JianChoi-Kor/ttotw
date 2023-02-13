@@ -120,4 +120,11 @@ public class WineRequestDto {
         @NotBlank(message = "품종 상세(영문)는 필수 입력값입니다.")
         private String varietiesDetails;
     }
+
+    @Getter
+    @Setter
+    public static class SearchWineList extends PageRequest {
+        //검색어
+        private String keyword;
+    }
 }
