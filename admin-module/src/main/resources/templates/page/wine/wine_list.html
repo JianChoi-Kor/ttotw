@@ -10,9 +10,22 @@
 </head>
 <!-- Content -->
 <div layout:fragment="content" class="container-fluid px-4">
-    <h2 class="mt-4">와인 리스트</h2>
+    <h2 class="mt-4 mb-4">와인 리스트</h2>
+    <div class="navbar mt-3">
+        <div>
+            <select name="size" id="size" th:onchange="sizeChange([[${#httpServletRequest.requestURI}]],this)">
+                <option value="10" th:selected="${result.pageable.pageSize==10}">10개씩 보기</option>
+                <option value="20" th:selected="${result.pageable.pageSize==20}">20개씩 보기</option>
+            </select>
+        </div>
 
-    <table>
+        <div>
+            <label for="search">검색어</label>
+            <input type="text" name="search" id="search" placeholder="제품명(영문 또는 한글)">
+        </div>
+    </div>
+
+    <table class="mt-2">
         <colgroup>
             <col width="15%">
             <col width="20%">
