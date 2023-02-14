@@ -41,7 +41,7 @@ public class WineController {
 
     @GetMapping("/{id}")
     public ModelAndView getWineDetails(@PathVariable Long id) {
-        ModelAndView modelAndView = new ModelAndView("page/wine/wine_list");
+        ModelAndView modelAndView = new ModelAndView("page/wine/wine_details");
 
         WineResponseDto.WineDetailsView result = wineService.getWineDetails(id);
         modelAndView.addObject("result", result);

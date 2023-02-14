@@ -9,76 +9,78 @@
     <script src="/js/table.js" defer></script>
 </head>
 <!-- Content -->
-<div layout:fragment="content" class="container-fluid px-4">
-    <h2 class="mt-4 mb-4">와인 리스트</h2>
-    <div class="navbar mt-3">
-        <div>
-            <select name="size" id="size" th:onchange="sizeChange([[${#httpServletRequest.requestURI}]],this)">
-                <option value="10" th:selected="${result.pageable.pageSize==10}">10개씩 보기</option>
-                <option value="20" th:selected="${result.pageable.pageSize==20}">20개씩 보기</option>
-            </select>
+<div layout:fragment="content">
+    <div class="container-fluid px-4">
+        <h2 class="mt-4 mb-4">와인 리스트</h2>
+        <div class="navbar mt-3">
+            <div>
+                <select name="size" id="size" th:onchange="sizeChange([[${#httpServletRequest.requestURI}]],this)">
+                    <option value="10" th:selected="${result.pageable.pageSize==10}">10개씩 보기</option>
+                    <option value="20" th:selected="${result.pageable.pageSize==20}">20개씩 보기</option>
+                </select>
+            </div>
+
+            <div>
+                <input type="text" class="search-bar" name="search" id="search" placeholder="제품명(영문 또는 한글)">
+                <button class="search-button" role="button" onclick="search()">검색</button>
+            </div>
         </div>
 
-        <div>
-            <input type="text" class="search-bar" name="search" id="search" placeholder="제품명(영문 또는 한글)">
-            <button class="search-button" role="button" onclick="search()">검색</button>
-        </div>
-    </div>
-
-    <table class="mt-2">
-        <colgroup>
-            <col width="15%">
-            <col width="20%">
-            <col width="20%">
-            <col width="6%">
-            <col width="12%">
-            <col width="12%">
-            <col width="15%">
-        </colgroup>
-        <thead>
-        <tr>
-            <th>타입</th>
-            <th>제품명(영문)</th>
-            <th>제품명(한글)</th>
-            <th>Image</th>
-            <th>최저 가격</th>
-            <th>최고 가격</th>
-            <th>생산지</th>
-        </tr>
-        </thead>
-        <tbody>
-        <th:block th:if="${result.empty}">
+        <table class="mt-2">
+            <colgroup>
+                <col width="15%">
+                <col width="20%">
+                <col width="20%">
+                <col width="6%">
+                <col width="12%">
+                <col width="12%">
+                <col width="15%">
+            </colgroup>
+            <thead>
             <tr>
-                <td colspan="7">null</td>
+                <th>타입</th>
+                <th>제품명(영문)</th>
+                <th>제품명(한글)</th>
+                <th>Image</th>
+                <th>최저 가격</th>
+                <th>최고 가격</th>
+                <th>생산지</th>
             </tr>
-        </th:block>
-        <th:block th:unless="${result.empty}">
-            <tr th:each="item : ${result.content}">
-                <td th:text="${item.type}"></td>
-                <td th:text="${item.originName}"></td>
-                <td th:text="${item.koreanName}"></td>
-                <td th:text="${item.fileFullPath}"></td>
-                <td th:text="${item.minPrice}"></td>
-                <td th:text="${item.maxPrice}"></td>
-                <td th:text="${item.country}"></td>
-            </tr>
+            </thead>
+            <tbody>
+            <th:block th:if="${result.empty}">
+                <tr>
+                    <td colspan="7">null</td>
+                </tr>
+            </th:block>
+            <th:block th:unless="${result.empty}">
+                <tr th:each="item : ${result.content}">
+                    <td th:text="${item.type}"></td>
+                    <td th:text="${item.originName}"></td>
+                    <td th:text="${item.koreanName}"></td>
+                    <td th:text="${item.fileFullPath}"></td>
+                    <td th:text="${item.minPrice}"></td>
+                    <td th:text="${item.maxPrice}"></td>
+                    <td th:text="${item.country}"></td>
+                </tr>
 
-            <input id="total-elements" th:value="${result.totalElements}" hidden>
-            <input id="total-pages" th:value="${result.totalPages}" hidden>
-        </th:block>
-        </tbody>
-    </table>
+                <input id="total-elements" th:value="${result.totalElements}" hidden>
+                <input id="total-pages" th:value="${result.totalPages}" hidden>
+            </th:block>
+            </tbody>
+        </table>
 
-    <nav class="pagination-container">
-        <button class="pagination-button" id="prev-button" aria-label="Previous page" title="Previous page">
-            &lt;
-        </button>
+        <nav class="pagination-container">
+            <button class="pagination-button" id="prev-button" aria-label="Previous page" title="Previous page">
+                &lt;
+            </button>
 
-        <div id="pagination-numbers"></div>
+            <div id="pagination-numbers"></div>
 
-        <button class="pagination-button" id="next-button" aria-label="Next page" title="Next page">
-            &gt;
-        </button>
-    </nav>
+            <button class="pagination-button" id="next-button" aria-label="Next page" title="Next page">
+                &gt;
+            </button>
+        </nav>
+    </div>
 </div>
 </html>
