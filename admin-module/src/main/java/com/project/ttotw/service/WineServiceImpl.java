@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -96,5 +97,16 @@ public class WineServiceImpl implements WineService {
     public WineResponseDto.WineDetailsView getWineDetails(Long id) {
         Wine wine = wineRepository.findById(id).orElse(null);
         return WineResponseDto.WineDetailsView.from(wine);
+    }
+
+    @Override
+    public void getWineImage(Long fileId, HttpServletResponse servletResponse) {
+        File file = fileRepository.findById(fileId).orElse(null);
+        if (file == null) {
+            return;
+        }
+
+        String fullFilePath = ftpUtils.fullFilePath(file);
+//        ftpUtils.getFile(fullFilePath);
     }
 }

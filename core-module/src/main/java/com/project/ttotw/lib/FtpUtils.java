@@ -166,4 +166,17 @@ public class FtpUtils {
     public String fullFilePath(File file) {
         return file.getSavedPath() + SEPARATOR + file.getSavedName() + PERIOD + file.getFileExt();
     }
+
+//    public File getFile(String fullFilePath) {
+//        open();
+//        try {
+//            ftp.deleteFile(fullFilePath);
+//        } catch (IOException e) {
+//            log.error("FTPClient:: file delete failed.");
+//            e.printStackTrace();
+//        } finally {
+//            close();
+//        }
+//        return null;
+//    }
 }

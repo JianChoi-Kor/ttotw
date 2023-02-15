@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,6 +48,11 @@ public class WineController {
         modelAndView.addObject("result", result);
 
         return modelAndView;
+    }
+
+    @GetMapping("/image/{fileId}")
+    public void getWineImage(@PathVariable Long fileId, HttpServletResponse servletResponse) {
+        wineService.getWineImage(fileId, servletResponse);
     }
 
     @GetMapping("/register")
