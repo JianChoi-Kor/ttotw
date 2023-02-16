@@ -1,6 +1,7 @@
 package com.project.ttotw.lib;
 
 import com.jcraft.jsch.*;
+import com.project.ttotw.entity.File;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -9,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -22,8 +25,6 @@ public class SftpUtils {
     private int port;
     @Value("${ttotw.sftp.username}")
     private String username;
-    @Value("${ttotw.sftp.password}")
-    private String password;
     @Value(("${ttotw.sftp.privateKey}"))
     private String privateKey;
     @Value("${ttotw.sftp.documentRoot}")
@@ -54,7 +55,6 @@ public class SftpUtils {
             jSchSession.setConfig(config);
             //접속
             jSchSession.connect();
-            System.out.println("jSchSession isConnected ?? " + jSchSession.isConnected());
 
             //sftp 채널 열기
             channel = jSchSession.openChannel("sftp");
@@ -70,24 +70,76 @@ public class SftpUtils {
     }
 
     private void close() {
-        channelSftp.quit();
-        jSchSession.disconnect();
+        if (jSchSession.isConnected()) {
+            channelSftp.disconnect();
+            jSchSession.disconnect();
+        }
     }
 
-    public void upload(MultipartFile file) {
+    public File upload(String firstDirectory, MultipartFile file) {
         open();
+
+        String originName = StringUtils.getFilename(file.getOriginalFilename());
+        String savedName = "";
+        String savedPath = "";
+        String extension = "";
+
         try (InputStream inputStream = file.getInputStream()){
+            //directory to store files for today's date
+            String yyyyMMdd = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+            //first directory path
+            String firstDirectoryPath = fileServerDocumentRoot + SEPARATOR + firstDirectory;
+            //upload directory path
+            String uploadDirectoryPath = fileServerDocumentRoot + SEPARATOR + firstDirectory + SEPARATOR + yyyyMMdd;
+            savedPath = uploadDirectoryPath;
+
+            //create directory
+            createDirectory(firstDirectoryPath, uploadDirectoryPath);
+
             //create uuid file name
             String uuidFileName = UUID.randomUUID().toString();
+            savedName = uuidFileName;
+
             //file extension
             String fileExtension = StringUtils.getFilenameExtension(file.getOriginalFilename());
+            extension = fileExtension;
 
-            channelSftp.put(inputStream, SEPARATOR + uuidFileName + PERIOD + fileExtension);
+            channelSftp.put(inputStream, uploadDirectoryPath + SEPARATOR + uuidFileName + PERIOD + fileExtension);
         } catch (IOException | SftpException e) {
             log.error("SFTP:: file upload failed.");
             e.printStackTrace();
         } finally {
             close();
+        }
+
+        File imageFile = File.builder()
+                .originName(originName)
+                .savedName(savedName)
+                .savedPath(savedPath)
+                .fileExt(extension)
+                .useAt(true)
+                .build();
+
+        return imageFile;
+    }
+
+    private void createDirectory(String firstDirectoryPath, String uploadPath) throws IOException {
+        try {
+            //check document root
+            if (!channelSftp.cd(fileServerDocumentRoot)) {
+                log.error("SFTP:: server doesn't exists root directory");
+                throw new IOException();
+            }
+
+            //directory check, if not exists create
+            if (!channelSftp.cd(firstDirectoryPath)) {
+                channelSftp.mkdir(firstDirectoryPath);
+            }
+            if (!channelSftp.cd(uploadPath)) {
+                channelSftp.mkdir(uploadPath);
+            }
+        } catch (SftpException e) {
+            e.printStackTrace();
         }
     }
 }
