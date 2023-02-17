@@ -4,7 +4,6 @@ import com.project.ttotw.entity.File;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
-import javax.servlet.ServletResponse;
 
 public interface FtpUtils {
 

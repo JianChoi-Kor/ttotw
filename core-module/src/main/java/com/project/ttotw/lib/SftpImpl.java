@@ -9,7 +9,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
-import javax.servlet.ServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -78,8 +77,6 @@ public class SftpImpl implements FtpUtils{
     public void close() {
         if (jSchSession.isConnected()) {
             channelSftp.disconnect();
-            channelSftp.quit();
-            channelSftp.exit();
             jSchSession.disconnect();
         }
     }
