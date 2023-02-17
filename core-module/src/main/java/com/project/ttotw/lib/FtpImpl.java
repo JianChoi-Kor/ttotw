@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -144,6 +145,29 @@ public class FtpImpl implements FtpUtils {
         }
     }
 
+    @Override
+    public void getImage(String path, ServletOutputStream servletOutputStream) {
+        open();
+        InputStream inputStream = null;
+        try {
+            inputStream = ftp.retrieveFileStream(path);
+            if (inputStream == null) {
+
+            }
+        } catch (IOException e) {
+            log.error("FTPClient:: get image failed.");
+            e.printStackTrace();
+        } finally {
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                log.error("FTPClient:: get image failed.");
+                e.printStackTrace();
+            }
+            close();
+        }
+    }
+
     //다중 업로드
 
     //다운로드
@@ -168,17 +192,4 @@ public class FtpImpl implements FtpUtils {
     public String fullFilePath(File file) {
         return file.getSavedPath() + SEPARATOR + file.getSavedName() + PERIOD + file.getFileExt();
     }
-
-//    public File getFile(String fullFilePath) {
-//        open();
-//        try {
-//            ftp.deleteFile(fullFilePath);
-//        } catch (IOException e) {
-//            log.error("FTPClient:: file delete failed.");
-//            e.printStackTrace();
-//        } finally {
-//            close();
-//        }
-//        return null;
-//    }
 }

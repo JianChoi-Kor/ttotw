@@ -8,8 +8,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.ServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Properties;
@@ -75,6 +78,8 @@ public class SftpImpl implements FtpUtils{
     public void close() {
         if (jSchSession.isConnected()) {
             channelSftp.disconnect();
+            channelSftp.quit();
+            channelSftp.exit();
             jSchSession.disconnect();
         }
     }
@@ -146,6 +151,7 @@ public class SftpImpl implements FtpUtils{
                 channelSftp.mkdir(uploadPath);
             }
         } catch (SftpException e) {
+            log.error("SFTP:: create directory failed.");
             e.printStackTrace();
         }
     }
@@ -163,5 +169,24 @@ public class SftpImpl implements FtpUtils{
             }
         }
         return res != null && !res.isEmpty();
+    }
+
+    @Override
+    public void getImage(String path, ServletOutputStream servletOutputStream) {
+        if (exists(path)) {
+            try (InputStream inputStream = channelSftp.get(path); OutputStream outputStream = servletOutputStream) {
+                int length;
+                byte[] buffer = new byte[1024];
+                while ((length = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, length);
+                }
+            } catch (SftpException e) {
+                log.error("SFTP:: get image failed.");
+                e.printStackTrace();
+            } catch (IOException e) {
+                log.error("SFTP:: get image failed.");
+                e.printStackTrace();
+            }
+        }
     }
 }
