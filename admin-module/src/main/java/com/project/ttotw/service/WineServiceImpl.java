@@ -5,7 +5,7 @@ import com.project.ttotw.dto.WineResponseDto;
 import com.project.ttotw.entity.File;
 import com.project.ttotw.entity.Wine;
 import com.project.ttotw.enums.FileDirectory;
-import com.project.ttotw.lib.FtpUtils;
+import com.project.ttotw.lib.FtpImpl;
 import com.project.ttotw.repository.FileRepository;
 import com.project.ttotw.repository.WineRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,13 +29,13 @@ public class WineServiceImpl implements WineService {
     private final WineRepository wineRepository;
     private final FileRepository fileRepository;
 
-    private final FtpUtils ftpUtils;
+    private final FtpImpl ftpImplUtils;
 
     @Transactional
     @Override
     public void registerWine(WineRequestDto.RegisterWine registerWine, MultipartFile wineImage) {
         //파일 등록
-        File file = ftpUtils.upload(FileDirectory.WINE.getDirectoryName(), wineImage);
+        File file = ftpImplUtils.upload(FileDirectory.WINE.getDirectoryName(), wineImage);
         //파일 저장
         fileRepository.save(file);
 
@@ -62,8 +62,8 @@ public class WineServiceImpl implements WineService {
             //save
             wineRepository.save(wine);
         } catch (Exception e) {
-            String fullFilePath = ftpUtils.fullFilePath(file);
-            ftpUtils.delete(fullFilePath);
+            String fullFilePath = ftpImplUtils.fullFilePath(file);
+            ftpImplUtils.delete(fullFilePath);
             //TODO:: customException 변경
             throw new RuntimeException("register wine failed.");
         }
@@ -106,7 +106,7 @@ public class WineServiceImpl implements WineService {
             return;
         }
 
-        String fullFilePath = ftpUtils.fullFilePath(file);
+        String fullFilePath = ftpImplUtils.fullFilePath(file);
 //        ftpUtils.getFile(fullFilePath);
     }
 }

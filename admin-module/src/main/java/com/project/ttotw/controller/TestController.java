@@ -1,7 +1,6 @@
 package com.project.ttotw.controller;
 
-import com.project.ttotw.entity.File;
-import com.project.ttotw.lib.SftpUtils;
+import com.project.ttotw.lib.SftpImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,11 +13,10 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/test")
 public class TestController {
 
-    private final SftpUtils sftpUtils;
+    private final SftpImpl sftpImpl;
 
     @GetMapping("")
     public void test(@RequestPart MultipartFile multipartFile) {
-        File file = sftpUtils.upload("", multipartFile);
-        file.getFileExt();
+        sftpImpl.upload("", multipartFile);
     }
 }

@@ -14,10 +14,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.Vector;
 
 @Slf4j
 @Component
-public class SftpUtils {
+public class SftpImpl implements FtpUtils{
 
     @Value("${ttotw.sftp.server}")
     private String server;
@@ -38,7 +39,8 @@ public class SftpUtils {
     private Channel channel;
     private ChannelSftp channelSftp;
 
-    private void open() {
+    @Override
+    public void open() {
         //JSch 객체를 생성
         jSch = new JSch();
 
@@ -56,26 +58,28 @@ public class SftpUtils {
             //접속
             jSchSession.connect();
 
-            //sftp 채널 열기
+            //sftp 채널 열기 및 접속
             channel = jSchSession.openChannel("sftp");
-
-            //채널을 FTP 용 채널 객체로 캐스팅
-            channelSftp = (ChannelSftp) channel;
-            channelSftp.connect();
+            channel.connect();
 
         } catch (JSchException e) {
             e.printStackTrace();
             log.error("SFTP:: server connect failed.");
         }
+
+        //채널을 FTP 용 채널 객체로 캐스팅
+        channelSftp = (ChannelSftp) channel;
     }
 
-    private void close() {
+    @Override
+    public void close() {
         if (jSchSession.isConnected()) {
             channelSftp.disconnect();
             jSchSession.disconnect();
         }
     }
 
+    @Override
     public File upload(String firstDirectory, MultipartFile file) {
         open();
 
@@ -112,34 +116,52 @@ public class SftpUtils {
             close();
         }
 
-        File imageFile = File.builder()
+        return File.builder()
                 .originName(originName)
                 .savedName(savedName)
                 .savedPath(savedPath)
                 .fileExt(extension)
                 .useAt(true)
                 .build();
+    }
 
-        return imageFile;
+    @Override
+    public void delete(String path) {
+
     }
 
     private void createDirectory(String firstDirectoryPath, String uploadPath) throws IOException {
         try {
             //check document root
-            if (!channelSftp.cd(fileServerDocumentRoot)) {
+            if (!this.exists(firstDirectoryPath)) {
                 log.error("SFTP:: server doesn't exists root directory");
                 throw new IOException();
             }
 
             //directory check, if not exists create
-            if (!channelSftp.cd(firstDirectoryPath)) {
+            if (!this.exists(firstDirectoryPath)) {
                 channelSftp.mkdir(firstDirectoryPath);
             }
-            if (!channelSftp.cd(uploadPath)) {
+            if (!this.exists(uploadPath)) {
                 channelSftp.mkdir(uploadPath);
             }
         } catch (SftpException e) {
             e.printStackTrace();
         }
+    }
+
+    //경로가 존재하는지 확인
+    private boolean exists(String path) {
+        Vector res = null;
+        try {
+            res = channelSftp.ls(path);
+        } catch (SftpException e) {
+            if (e.id == ChannelSftp.SSH_FX_NO_SUCH_FILE) {
+                return false;
+            } else {
+                e.printStackTrace();
+            }
+        }
+        return res != null && !res.isEmpty();
     }
 }
