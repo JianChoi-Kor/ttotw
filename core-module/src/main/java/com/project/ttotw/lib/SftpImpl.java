@@ -4,6 +4,7 @@ import com.jcraft.jsch.*;
 import com.project.ttotw.entity.File;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -114,6 +115,7 @@ public class SftpImpl implements FtpUtils{
         } catch (IOException | SftpException e) {
             log.error("SFTP:: file upload failed.");
             e.printStackTrace();
+            return null;
         } finally {
             close();
         }
@@ -135,7 +137,7 @@ public class SftpImpl implements FtpUtils{
     private void createDirectory(String firstDirectoryPath, String uploadPath) throws IOException {
         try {
             //check document root
-            if (!this.exists(firstDirectoryPath)) {
+            if (!this.exists(fileServerDocumentRoot)) {
                 log.error("SFTP:: server doesn't exists root directory");
                 throw new IOException();
             }
@@ -170,20 +172,25 @@ public class SftpImpl implements FtpUtils{
 
     @Override
     public void getImage(String path, ServletOutputStream servletOutputStream) {
-        if (exists(path)) {
-            try (InputStream inputStream = channelSftp.get(path); OutputStream outputStream = servletOutputStream) {
-                int length;
-                byte[] buffer = new byte[1024];
-                while ((length = inputStream.read(buffer)) != -1) {
-                    outputStream.write(buffer, 0, length);
+        open();
+        try {
+            if (exists(path)) {
+                try (InputStream inputStream = channelSftp.get(path); OutputStream outputStream = servletOutputStream) {
+                    int length;
+                    byte[] buffer = new byte[1024];
+                    while ((length = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, length);
+                    }
+                } catch (SftpException e) {
+                    log.error("SFTP:: get image failed.");
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    log.error("SFTP:: get image failed.");
+                    e.printStackTrace();
                 }
-            } catch (SftpException e) {
-                log.error("SFTP:: get image failed.");
-                e.printStackTrace();
-            } catch (IOException e) {
-                log.error("SFTP:: get image failed.");
-                e.printStackTrace();
             }
+        } finally {
+            close();
         }
     }
 }

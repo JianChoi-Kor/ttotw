@@ -5,7 +5,7 @@ import com.project.ttotw.dto.WineResponseDto;
 import com.project.ttotw.entity.File;
 import com.project.ttotw.entity.Wine;
 import com.project.ttotw.enums.FileDirectory;
-import com.project.ttotw.lib.FtpImpl;
+import com.project.ttotw.lib.SftpImpl;
 import com.project.ttotw.repository.FileRepository;
 import com.project.ttotw.repository.WineRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,13 +30,16 @@ public class WineServiceImpl implements WineService {
     private final WineRepository wineRepository;
     private final FileRepository fileRepository;
 
-    private final FtpImpl ftpImplUtils;
+    private final SftpImpl ftpImplUtils;
 
     @Transactional
     @Override
     public void registerWine(WineRequestDto.RegisterWine registerWine, MultipartFile wineImage) {
         //파일 등록
         File file = ftpImplUtils.upload(FileDirectory.WINE.getDirectoryName(), wineImage);
+        if (file == null) {
+            throw new RuntimeException("register wine failed.");
+        }
         //파일 저장
         fileRepository.save(file);
 
