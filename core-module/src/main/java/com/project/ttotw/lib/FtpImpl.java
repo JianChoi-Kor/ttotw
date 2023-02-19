@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -83,7 +84,7 @@ public class FtpImpl implements FtpUtils {
         String savedPath = "";
         String extension = "";
 
-        try (InputStream inputStream = file.getInputStream()){
+        try (InputStream inputStream = file.getInputStream()) {
             //directory to store files for today's date
             String yyyyMMdd = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
             //first directory path
@@ -149,11 +150,19 @@ public class FtpImpl implements FtpUtils {
     public void getImage(String path, ServletOutputStream servletOutputStream) {
         open();
         InputStream inputStream = null;
-        try {
+        try (OutputStream outputStream = servletOutputStream) {
             inputStream = ftp.retrieveFileStream(path);
+            //해당 경로에 파일이 있는지 체크
             if (inputStream == null) {
-
+                throw new IOException("file not found.");
             }
+
+            int length;
+            byte[] buffer = new byte[1024];
+            while ((length = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, length);
+            }
+
         } catch (IOException e) {
             log.error("FTPClient:: get image failed.");
             e.printStackTrace();
@@ -167,10 +176,6 @@ public class FtpImpl implements FtpUtils {
             close();
         }
     }
-
-    //다중 업로드
-
-    //다운로드
 
     //폴더 생성
     public void createDirectory(String firstDirectoryPath, String uploadPath) throws IOException {
@@ -187,9 +192,5 @@ public class FtpImpl implements FtpUtils {
         if (!ftp.changeWorkingDirectory(uploadPath)) {
             ftp.makeDirectory(uploadPath);
         }
-    }
-
-    public String fullFilePath(File file) {
-        return file.getSavedPath() + SEPARATOR + file.getSavedName() + PERIOD + file.getFileExt();
     }
 }

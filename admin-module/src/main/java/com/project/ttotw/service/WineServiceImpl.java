@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -62,7 +63,7 @@ public class WineServiceImpl implements WineService {
             //save
             wineRepository.save(wine);
         } catch (Exception e) {
-            String fullFilePath = ftpImplUtils.fullFilePath(file);
+            String fullFilePath = file.fullFilePath();
             ftpImplUtils.delete(fullFilePath);
             //TODO:: customException 변경
             throw new RuntimeException("register wine failed.");
@@ -106,7 +107,11 @@ public class WineServiceImpl implements WineService {
             return;
         }
 
-        String fullFilePath = ftpImplUtils.fullFilePath(file);
-//        ftpUtils.getFile(fullFilePath);
+        String fullFilePath = file.fullFilePath();
+        try {
+            ftpImplUtils.getImage(fullFilePath, servletResponse.getOutputStream());
+        } catch (IOException e) {
+            throw new RuntimeException("get image failed.");
+        }
     }
 }

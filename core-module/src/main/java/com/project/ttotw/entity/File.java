@@ -39,4 +39,11 @@ public class File extends BaseDateEntity {
     //삭제 여부
     @Column(name = "use_at", nullable = false)
     private boolean useAt;
+
+    public String fullFilePath() {
+        final String SEPARATOR = "/";
+        final String PERIOD = ".";
+
+        return this.getSavedPath() + SEPARATOR + this.getSavedName() + PERIOD + this.getFileExt();
+    }
 }
