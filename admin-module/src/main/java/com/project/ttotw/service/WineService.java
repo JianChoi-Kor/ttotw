@@ -13,4 +13,5 @@ public interface WineService {
     Page<WineResponseDto.WineListView> getWineList(WineRequestDto.SearchWineList searchWineList);
     WineResponseDto.WineDetailsView getWineDetails(Long id);
     void getWineImage(Long fileId, HttpServletResponse servletResponse);
+    void deleteWine(Long id);
 }

@@ -4,7 +4,6 @@ import com.jcraft.jsch.*;
 import com.project.ttotw.entity.File;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -131,7 +130,17 @@ public class SftpImpl implements FtpUtils{
 
     @Override
     public void delete(String path) {
-
+        open();
+        try {
+            if (exists(path)) {
+                channelSftp.rm(path);
+            }
+        } catch (SftpException e) {
+            log.error("SFTP:: file delete failed.");
+            e.printStackTrace();
+        } finally {
+            close();
+        }
     }
 
     private void createDirectory(String firstDirectoryPath, String uploadPath) throws IOException {

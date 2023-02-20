@@ -79,9 +79,10 @@ public class WineServiceImpl implements WineService {
 
         Page<Wine> wineList;
         if (StringUtils.hasText(searchWineList.getKeyword())) {
-            wineList = wineRepository.findByOriginNameContainingOrKoreanNameContaining(searchWineList.getKeyword(), searchWineList.getKeyword(), pageable);
+            //TODO:: querydsl 적용
+            wineList = wineRepository.findByOriginNameContainingOrKoreanNameContainingOrderByIdDesc(searchWineList.getKeyword(), searchWineList.getKeyword(), pageable);
         } else {
-            wineList = wineRepository.findAll(pageable);
+            wineList = wineRepository.findAllByUseAtOrderByIdDesc(true, pageable);
         }
 
         List<WineResponseDto.WineListView> content = new ArrayList<>();
@@ -99,7 +100,8 @@ public class WineServiceImpl implements WineService {
 
     @Override
     public WineResponseDto.WineDetailsView getWineDetails(Long id) {
-        Wine wine = wineRepository.findById(id).orElse(null);
+        //TODO:: null 일 경우 처리
+        Wine wine = wineRepository.findByIdAndUseAt(id, true).orElse(null);
         return WineResponseDto.WineDetailsView.from(wine);
     }
 
@@ -116,5 +118,18 @@ public class WineServiceImpl implements WineService {
         } catch (IOException e) {
             throw new RuntimeException("get image failed.");
         }
+    }
+
+    @Transactional
+    @Override
+    public void deleteWine(Long id) {
+        Wine wine = wineRepository.findById(id).orElse(null);
+        if (wine == null) {
+            throw new RuntimeException("delete wine failed.");
+        }
+        //update useAt
+        wine = wine.delete();
+        //save
+        wineRepository.save(wine);
     }
 }

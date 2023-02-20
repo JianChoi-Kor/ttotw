@@ -11771,3 +11771,8 @@ select:disabled {
 select::-ms-expand {
     display: none;
 }
+
+.details-image {
+  display: block;
+  margin: auto;
+}

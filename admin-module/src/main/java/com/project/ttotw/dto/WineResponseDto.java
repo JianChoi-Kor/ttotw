@@ -66,7 +66,7 @@ public class WineResponseDto {
         private String type;
         private String originName;
         private String koreanName;
-        private String fileFullPath;
+        private Long fileId;
         private Long minPrice;
         private Long maxPrice;
         private Integer tannin;
@@ -91,15 +91,13 @@ public class WineResponseDto {
             final String SEPARATOR = "/";
             final String PERIOD = ".";
 
-            String fullFilePath = file.getSavedPath() + SEPARATOR + file.getSavedName() + PERIOD + file.getFileExt();
-
             return WineDetailsView.builder()
                     .id(wine.getId())
-                    .grade(wine.getGrade().name())
-                    .type(wine.getType().name())
+                    .grade(wine.getGrade().getDescription())
+                    .type(wine.getType().getDescription())
                     .originName(wine.getOriginName())
                     .koreanName(wine.getKoreanName())
-                    .fileFullPath(fullFilePath)
+                    .fileId(wine.getFile().getId())
                     .minPrice(wine.getMinPrice())
                     .maxPrice(wine.getMaxPrice())
                     .tannin(wine.getTannin())

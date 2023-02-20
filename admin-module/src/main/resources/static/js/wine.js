@@ -97,7 +97,6 @@ function registerSubmit() {
         body: formData
     })
     .then((res) => {
-        console.log(res);
         if(res.status === 200) {
             alert("등록에 성공했습니다.");
             location.href='/wine';
@@ -109,54 +108,21 @@ function registerSubmit() {
     }).catch(err => console.log("err: " + err));
 }
 
-function modifySubmit() {
-    let registerWineForm = document.getElementById('registerWine');
-
-    if (registerWineForm.koreanName.value == '') {
-        alert("제품명(한글)을 입력해주세요.");
-        return;
+function deleteSubmit(id) {
+    if (confirm("삭제 하시겠습니까?")) {
+        fetch("http://localhost:8901/wine/" + id, {
+            method: 'DELETE',
+            headers: {}
+        })
+        .then((res) => {
+            if(res.status === 200) {
+                alert("삭제에 성공했습니다.");
+                location.href='/wine';
+            } else if(res.status === 400) {
+                alert("잘못된 요청값이 존재합니다.");
+            } else {
+                alert("요청 중 오류가 발생했습니다.");
+            }
+        }).catch(err => console.log("err: " + err));
     }
-    if (registerWineForm.originName.value == '') {
-        alert("제품명(영문)을 입력해주세요.");
-        return;
-    }
-    if (registerWineForm.grade.value == '선택') {
-        alert("등급을 선택해주세요.");
-        return;
-    }
-    if (registerWineForm.type.value == '선택') {
-        alert("타입을 선택해주세요.");
-        return;
-    }
-    if (registerWineForm.price.value == '') {
-        alert("가격을 입력해주세요.");
-        return;
-    }
-    if (registerWineForm.country.value == '선택') {
-        alert("생산지를 선택해주세요.");
-        return;
-    }
-    if (registerWineForm.countryDetails.value == '') {
-        alert('생산지 상세(영문)을 입력해주세요.');
-        return;
-    }
-    if (registerWineForm.varieties.value == '') {
-        alert('품종을 선택해주세요.');
-        return;
-    }
-    if (registerWineForm.varietiesDetails.value == '') {
-        alert('품종 상세(영문)을 입력해주세요.');
-        return;
-    }
-    if (registerWineForm.wineImage.value == '') {
-        alert('와인 이미지를 등록해주세요.');
-        return;
-    }
-
-    const formData = new FormData(registerWineForm);
-    fetch("http://localhost:8901/wine/register", {
-        method: 'POST',
-        headers: {},
-        body: formData
-    });
 }

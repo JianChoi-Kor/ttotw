@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.Collection;
 
 
@@ -96,4 +97,9 @@ public class Wine extends BaseDateEntity {
     //삭제 여부(true: 사용 중, false: 삭제)
     @Column(name = "use_at", nullable = false)
     private boolean useAt;
+
+    public Wine delete() {
+        this.useAt = false;
+        return this;
+    }
 }

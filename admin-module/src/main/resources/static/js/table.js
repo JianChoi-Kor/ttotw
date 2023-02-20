@@ -102,11 +102,6 @@ window.addEventListener("load", () => {
 function search() {
     let searchKeyword = document.getElementById("search").value;
 
-    if (searchKeyword == '') {
-        alert('제품명(영문 또는 한글)을 입력해주세요.');
-        return;
-    }
-
     const searchParam = 'keyword=' + searchKeyword;
     window.location.href = pathName + '?' + searchParam;
 }

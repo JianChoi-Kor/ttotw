@@ -94,35 +94,14 @@ public class WineController {
         return ResponseEntity.ok().build();
     }
 
-//    @GetMapping("/modify")
-//    public ModelAndView modifyWine() {
-//        ModelAndView modelAndView = new ModelAndView("page/wine/wine_modify");
-//
-//        //CountryOfOrigin Enum
-//        List<EnumResDto.CommonEnumRes> countryEnumList = CountryOfOrigin.getEnumList();
-//        modelAndView.addObject("countryEnumList", countryEnumList);
-//
-//        //WineGrad Enum
-//        List<EnumResDto.CommonEnumRes> wineGradeEnumList = WineGrade.getEnumList();
-//        modelAndView.addObject("wineGradeEnumList", wineGradeEnumList);
-//
-//        //WineType Enum
-//        List<EnumResDto.CommonEnumRes> windTypeEnumList = WineType.getEnumList();
-//        modelAndView.addObject("wineTypeEnumList", windTypeEnumList);
-//
-//        //grapeVarietiesList
-//        List<GrapeVarieties> grapeVarietiesList = grapeVarietiesService.findAll();
-//        List<EnumResDto.CommonGrapeVarietiesRes> commonGrapeVarietiesRes = grapeVarietiesList.stream()
-//                .map(EnumResDto.CommonGrapeVarietiesRes::from)
-//                .collect(Collectors.toList());
-//        modelAndView.addObject("commonGrapeVarietiesRes", commonGrapeVarietiesRes);
-//
-//        return modelAndView;
-//    }
-//
-//    @ResponseBody
-//    @PostMapping("/modify")
-//    public ResponseEntity<?> modifyWine(WineRequestDto.ModifyWine modifyWine) {
-//        return ResponseEntity.ok().build();
-//    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteWine(@PathVariable Long id) {
+        if (id == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        wineService.deleteWine(id);
+
+        return ResponseEntity.ok().build();
+    }
 }
