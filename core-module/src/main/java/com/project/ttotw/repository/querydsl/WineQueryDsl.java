@@ -1,10 +1,14 @@
 package com.project.ttotw.repository.querydsl;
 
 import com.project.ttotw.entity.Wine;
+import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface WineQueryDsl {
+import java.util.List;
 
-    Page<Wine> findAllBySearch(String keyword1, String keyword2, boolean useAt, Pageable pageable);
+public interface WineQueryDsl {
+    List<Wine> findAll(List<Predicate> where, Pageable pageable);
+    Long getAllCount(List<Predicate> where);
+    Page<Wine> findAllPaging(List<Predicate> where, Pageable pageable);
 }

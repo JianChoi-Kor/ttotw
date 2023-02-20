@@ -3,11 +3,14 @@ package com.project.ttotw.service;
 import com.project.ttotw.dto.WineRequestDto;
 import com.project.ttotw.dto.WineResponseDto;
 import com.project.ttotw.entity.File;
+import com.project.ttotw.entity.QWine;
 import com.project.ttotw.entity.Wine;
 import com.project.ttotw.enums.FileDirectory;
+import com.project.ttotw.lib.ScriptUtils;
 import com.project.ttotw.lib.SftpImpl;
 import com.project.ttotw.repository.FileRepository;
 import com.project.ttotw.repository.WineRepository;
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -77,31 +80,33 @@ public class WineServiceImpl implements WineService {
     public Page<WineResponseDto.WineListView> getWineList(WineRequestDto.SearchWineList searchWineList) {
         Pageable pageable = searchWineList.of();
 
-        Page<Wine> wineList;
+        //where
+        List<Predicate> where = new ArrayList<>();
+        where.add(QWine.wine.useAt.eq(true));
         if (StringUtils.hasText(searchWineList.getKeyword())) {
-            //TODO:: querydsl 적용
-            wineList = wineRepository.findByOriginNameContainingOrKoreanNameContainingOrderByIdDesc(searchWineList.getKeyword(), searchWineList.getKeyword(), pageable);
-        } else {
-            wineList = wineRepository.findAllByUseAtOrderByIdDesc(true, pageable);
+            where.add(QWine.wine.originName.contains(searchWineList.getKeyword()).or(QWine.wine.koreanName.contains(searchWineList.getKeyword())));
         }
+
+        Page<Wine> wineList = wineRepository.findAllPaging(where, pageable);
 
         List<WineResponseDto.WineListView> content = new ArrayList<>();
-        if (wineList.getContent().isEmpty()) {
-            return new PageImpl<>(content, pageable, wineList.getTotalElements());
+        if (!wineList.getContent().isEmpty()) {
+            content = wineList.getContent()
+                    .stream()
+                    .map(WineResponseDto.WineListView::from)
+                    .collect(Collectors.toList());
         }
-
-        content = wineList.getContent()
-                .stream()
-                .map(WineResponseDto.WineListView::from)
-                .collect(Collectors.toList());
 
         return new PageImpl<>(content, pageable, wineList.getTotalElements());
     }
 
     @Override
-    public WineResponseDto.WineDetailsView getWineDetails(Long id) {
-        //TODO:: null 일 경우 처리
+    public WineResponseDto.WineDetailsView getWineDetails(Long id, HttpServletResponse servletResponse) throws IOException {
         Wine wine = wineRepository.findByIdAndUseAt(id, true).orElse(null);
+        if (wine == null) {
+            ScriptUtils.alertAndBackPage(servletResponse, "해당하는 데이터가 존재하지 않습니다.");
+        }
+
         return WineResponseDto.WineDetailsView.from(wine);
     }
 
