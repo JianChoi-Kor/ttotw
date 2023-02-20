@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,10 +42,10 @@ public class WineController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView getWineDetails(@PathVariable Long id) {
+    public ModelAndView getWineDetails(@PathVariable Long id, HttpServletResponse servletResponse) throws IOException {
         ModelAndView modelAndView = new ModelAndView("page/wine/wine_details");
 
-        WineResponseDto.WineDetailsView result = wineService.getWineDetails(id);
+        WineResponseDto.WineDetailsView result = wineService.getWineDetails(id, servletResponse);
         modelAndView.addObject("result", result);
 
         return modelAndView;

@@ -19,149 +19,150 @@
                                 <div class="card-header"><h3 class="text-center font-weight-light my-1">와인 상세</h3>
                                 </div>
                                 <div class="card-body">
-                                    <form id="registerWine">
+                                    <th:block th:if="${result} != null">
+                                        <form id="registerWine">
 
-                                        <img class="details-image" th:src="@{/wine/image/} + ${result.fileId}" />
+                                            <img class="details-image" th:src="@{/wine/image/} + ${result.fileId}" />
 
-                                        <div class="form-floating mb-3">
-                                            <input class="form-control" name="koreanName" id="koreanName"
-                                                   type="text" th:value="${result.koreanName}" readonly/>
-                                            <label for="koreanName">제품명(한글)</label>
-                                        </div>
-                                        <div class="form-floating mb-3">
-                                            <input class="form-control" name="originName" id="originName"
-                                                   type="text" th:value="${result.originName}" readonly/>
-                                            <label for="originName">제품명(영문)</label>
-                                        </div>
-
-                                        <div class="form-floating mb-3">
-                                            <input class="form-control" name="grade" id="grade"
-                                                   type="text" th:value="${result.grade}" readonly/>
-                                            <label for="grade">등급</label>
-                                        </div>
-                                        <div class="form-floating mb-3">
-                                            <input class="form-control" name="type" id="type"
-                                                   type="text" th:value="${result.type}" readonly/>
-                                            <label for="type">타입</label>
-                                        </div>
-
-                                        <div class="form-floating mb-3">
-                                            <input class="form-control" name="price" id="price" type="text"
-                                                   th:value="${result.minPrice} + '원 ~ ' + ${result.maxPrice} + '원'" readonly/>
-                                            <label for="price">가격(원)</label>
-                                        </div>
-
-                                        <div class="form-radio mb-3 mt-3">
-                                            <p class="form-radio-title">타닌(tannin)</p>
-                                            <div class="form-radio-group">
-                                                <input type="radio" name="tannin" id="tannin-1" th:checked="${result.tannin} == 1" onclick="return(false);">
-                                                <label for="tannin-1">1</label>
-
-                                                <input type="radio" name="tannin" id="tannin-2" th:checked="${result.tannin} == 2" onclick="return(false);">
-                                                <label for="tannin-2">2</label>
-
-                                                <input type="radio" name="tannin" id="tannin-3" th:checked="${result.tannin} == 3" onclick="return(false);">
-                                                <label for="tannin-3">3</label>
-
-                                                <input type="radio" name="tannin" id="tannin-4" th:checked="${result.tannin} == 4" onclick="return(false);">
-                                                <label for="tannin-4">4</label>
-
-                                                <input type="radio" name="tannin" id="tannin-5" th:checked="${result.tannin} == 5" onclick="return(false);">
-                                                <label for="tannin-5">5</label>
+                                            <div class="form-floating mb-3">
+                                                <input class="form-control" name="koreanName" id="koreanName"
+                                                       type="text" th:value="${result.koreanName}" readonly/>
+                                                <label for="koreanName">제품명(한글)</label>
                                             </div>
-                                        </div>
-
-                                        <div class="form-radio mb-3 mt-3">
-                                            <p class="form-radio-title">바디(body)</p>
-                                            <div class="form-radio-group">
-                                                <input type="radio" name="body" id="body-1" th:checked="${result.body} == 1" onclick="return(false);">
-                                                <label for="body-1">1</label>
-
-                                                <input type="radio" name="body" id="body-2" th:checked="${result.body} == 2" onclick="return(false);">
-                                                <label for="body-2">2</label>
-
-                                                <input type="radio" name="body" id="body-3" th:checked="${result.body} == 3" onclick="return(false);">
-                                                <label for="body-3">3</label>
-
-                                                <input type="radio" name="body" id="body-4" th:checked="${result.body} == 4" onclick="return(false);">
-                                                <label for="body-4">4</label>
-
-                                                <input type="radio" name="body" id="body-5" th:checked="${result.body} == 5" onclick="return(false);">
-                                                <label for="body-5">5</label>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-radio mb-3 mt-3">
-                                            <p class="form-radio-title">산미(acidity)</p>
-                                            <div class="form-radio-group">
-                                                <input type="radio" name="acidity" id="acidity-1" th:checked="${result.acidity} == 1" onclick="return(false);">
-                                                <label for="acidity-1">1</label>
-
-                                                <input type="radio" name="acidity" id="acidity-2" th:checked="${result.acidity} == 2" onclick="return(false);">
-                                                <label for="acidity-2">2</label>
-
-                                                <input type="radio" name="acidity" id="acidity-3" th:checked="${result.acidity} == 3" onclick="return(false);">
-                                                <label for="acidity-3">3</label>
-
-                                                <input type="radio" name="acidity" id="acidity-4" th:checked="${result.acidity} == 4" onclick="return(false);">
-                                                <label for="acidity-4">4</label>
-
-                                                <input type="radio" name="acidity" id="acidity-5" th:checked="${result.acidity} == 5" onclick="return(false);">
-                                                <label for="acidity-5">5</label>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-radio mb-3">
-                                            <p class="form-radio-title">당도(dry)</p>
-                                            <div class="form-radio-group">
-                                                <input type="radio" name="dry" id="dry-1" th:checked="${result.acidity} == 1" onclick="return(false);">
-                                                <label for="dry-1">1</label>
-
-                                                <input type="radio" name="dry" id="dry-2" th:checked="${result.acidity} == 2" onclick="return(false);">
-                                                <label for="dry-2">2</label>
-
-                                                <input type="radio" name="dry" id="dry-3" th:checked="${result.acidity} == 3" onclick="return(false);">
-                                                <label for="dry-3">3</label>
-
-                                                <input type="radio" name="dry" id="dry-4" th:checked="${result.acidity} == 4" onclick="return(false);">
-                                                <label for="dry-4">4</label>
-
-                                                <input type="radio" name="dry" id="dry-5" th:checked="${result.acidity} == 5" onclick="return(false);">
-                                                <label for="dry-5">5</label>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-floating mb-3">
-                                            <input class="form-control" name="country" id="country" type="text"
-                                                   th:value="${result.country}" readonly/>
-                                            <label for="country">생산지</label>
-                                        </div>
-
-                                        <div class="form-floating mb-3">
-                                            <input class="form-control" name="countryDetails" id="countryDetails"
-                                                   th:value="${result.countryDetails}" readonly/>
-                                            <label for="countryDetails">생산지 상세(영문)</label>
-                                        </div>
-
-                                        <div class="form-floating mb-3">
-                                            <input class="form-control" name="varieties" id="varieties"
-                                                   th:value="${result.varieties}" readonly/>
-                                            <label for="varieties">품종</label>
-                                        </div>
-
-                                        <div class="form-floating mb-3">
-                                            <input class="form-control" name="varietiesDetails"
-                                                   id="varietiesDetails" th:value="${result.varietiesDetails}" readonly/>
-                                            <label for="varietiesDetails">품종 상세(영문)</label>
-                                        </div>
-
-                                        <div class="mt-4 mb-0">
-                                            <div class="d-grid">
-                                                <a class="btn btn-primary btn-block" th:onclick="deleteSubmit([[${result.id}]])">삭제</a>
+                                            <div class="form-floating mb-3">
+                                                <input class="form-control" name="originName" id="originName"
+                                                       type="text" th:value="${result.originName}" readonly/>
+                                                <label for="originName">제품명(영문)</label>
                                             </div>
 
-                                        </div>
-                                    </form>
+                                            <div class="form-floating mb-3">
+                                                <input class="form-control" name="grade" id="grade"
+                                                       type="text" th:value="${result.grade}" readonly/>
+                                                <label for="grade">등급</label>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input class="form-control" name="type" id="type"
+                                                       type="text" th:value="${result.type}" readonly/>
+                                                <label for="type">타입</label>
+                                            </div>
+
+                                            <div class="form-floating mb-3">
+                                                <input class="form-control" name="price" id="price" type="text"
+                                                       th:value="${result.minPrice} + '원 ~ ' + ${result.maxPrice} + '원'" readonly/>
+                                                <label for="price">가격(원)</label>
+                                            </div>
+
+                                            <div class="form-radio mb-3 mt-3">
+                                                <p class="form-radio-title">타닌(tannin)</p>
+                                                <div class="form-radio-group">
+                                                    <input type="radio" name="tannin" id="tannin-1" th:checked="${result.tannin} == 1" onclick="return(false);">
+                                                    <label for="tannin-1">1</label>
+
+                                                    <input type="radio" name="tannin" id="tannin-2" th:checked="${result.tannin} == 2" onclick="return(false);">
+                                                    <label for="tannin-2">2</label>
+
+                                                    <input type="radio" name="tannin" id="tannin-3" th:checked="${result.tannin} == 3" onclick="return(false);">
+                                                    <label for="tannin-3">3</label>
+
+                                                    <input type="radio" name="tannin" id="tannin-4" th:checked="${result.tannin} == 4" onclick="return(false);">
+                                                    <label for="tannin-4">4</label>
+
+                                                    <input type="radio" name="tannin" id="tannin-5" th:checked="${result.tannin} == 5" onclick="return(false);">
+                                                    <label for="tannin-5">5</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-radio mb-3 mt-3">
+                                                <p class="form-radio-title">바디(body)</p>
+                                                <div class="form-radio-group">
+                                                    <input type="radio" name="body" id="body-1" th:checked="${result.body} == 1" onclick="return(false);">
+                                                    <label for="body-1">1</label>
+
+                                                    <input type="radio" name="body" id="body-2" th:checked="${result.body} == 2" onclick="return(false);">
+                                                    <label for="body-2">2</label>
+
+                                                    <input type="radio" name="body" id="body-3" th:checked="${result.body} == 3" onclick="return(false);">
+                                                    <label for="body-3">3</label>
+
+                                                    <input type="radio" name="body" id="body-4" th:checked="${result.body} == 4" onclick="return(false);">
+                                                    <label for="body-4">4</label>
+
+                                                    <input type="radio" name="body" id="body-5" th:checked="${result.body} == 5" onclick="return(false);">
+                                                    <label for="body-5">5</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-radio mb-3 mt-3">
+                                                <p class="form-radio-title">산미(acidity)</p>
+                                                <div class="form-radio-group">
+                                                    <input type="radio" name="acidity" id="acidity-1" th:checked="${result.acidity} == 1" onclick="return(false);">
+                                                    <label for="acidity-1">1</label>
+
+                                                    <input type="radio" name="acidity" id="acidity-2" th:checked="${result.acidity} == 2" onclick="return(false);">
+                                                    <label for="acidity-2">2</label>
+
+                                                    <input type="radio" name="acidity" id="acidity-3" th:checked="${result.acidity} == 3" onclick="return(false);">
+                                                    <label for="acidity-3">3</label>
+
+                                                    <input type="radio" name="acidity" id="acidity-4" th:checked="${result.acidity} == 4" onclick="return(false);">
+                                                    <label for="acidity-4">4</label>
+
+                                                    <input type="radio" name="acidity" id="acidity-5" th:checked="${result.acidity} == 5" onclick="return(false);">
+                                                    <label for="acidity-5">5</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-radio mb-3">
+                                                <p class="form-radio-title">당도(dry)</p>
+                                                <div class="form-radio-group">
+                                                    <input type="radio" name="dry" id="dry-1" th:checked="${result.acidity} == 1" onclick="return(false);">
+                                                    <label for="dry-1">1</label>
+
+                                                    <input type="radio" name="dry" id="dry-2" th:checked="${result.acidity} == 2" onclick="return(false);">
+                                                    <label for="dry-2">2</label>
+
+                                                    <input type="radio" name="dry" id="dry-3" th:checked="${result.acidity} == 3" onclick="return(false);">
+                                                    <label for="dry-3">3</label>
+
+                                                    <input type="radio" name="dry" id="dry-4" th:checked="${result.acidity} == 4" onclick="return(false);">
+                                                    <label for="dry-4">4</label>
+
+                                                    <input type="radio" name="dry" id="dry-5" th:checked="${result.acidity} == 5" onclick="return(false);">
+                                                    <label for="dry-5">5</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-floating mb-3">
+                                                <input class="form-control" name="country" id="country" type="text"
+                                                       th:value="${result.country}" readonly/>
+                                                <label for="country">생산지</label>
+                                            </div>
+
+                                            <div class="form-floating mb-3">
+                                                <input class="form-control" name="countryDetails" id="countryDetails"
+                                                       th:value="${result.countryDetails}" readonly/>
+                                                <label for="countryDetails">생산지 상세(영문)</label>
+                                            </div>
+
+                                            <div class="form-floating mb-3">
+                                                <input class="form-control" name="varieties" id="varieties"
+                                                       th:value="${result.varieties}" readonly/>
+                                                <label for="varieties">품종</label>
+                                            </div>
+
+                                            <div class="form-floating mb-3">
+                                                <input class="form-control" name="varietiesDetails"
+                                                       id="varietiesDetails" th:value="${result.varietiesDetails}" readonly/>
+                                                <label for="varietiesDetails">품종 상세(영문)</label>
+                                            </div>
+
+                                            <div class="mt-4 mb-0">
+                                                <div class="d-grid">
+                                                    <a class="btn btn-primary btn-block" th:onclick="deleteSubmit([[${result.id}]])">삭제</a>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </th:block>
                                 </div>
                             </div>
                         </div>
