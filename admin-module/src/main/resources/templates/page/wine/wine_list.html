@@ -50,7 +50,7 @@
             <tbody>
             <th:block th:if="${result.empty}">
                 <tr>
-                    <td colspan="7">null</td>
+                    <td colspan="7">내역이 존재하지 않습니다.</td>
                 </tr>
             </th:block>
             <th:block th:unless="${result.empty}">
@@ -63,8 +63,8 @@
                             <i class="fa-solid fa-wine-glass"></i>
                         </a>
                     </td>
-                    <td th:text="${item.minPrice}"></td>
-                    <td th:text="${item.maxPrice}"></td>
+                    <td th:text="${#numbers.formatInteger(item.minPrice, 3, 'COMMA')} + '원'"></td>
+                    <td th:text="${#numbers.formatInteger(item.maxPrice, 3, 'COMMA')} + '원'"></td>
                     <td th:text="${item.country}"></td>
                 </tr>
 

@@ -30,7 +30,7 @@ const handlePageButtonsStatus = () => {
     enableButton(prevButton);
   }
 
-  if (pageCount === currentPage) {
+  if (pageCount == currentPage) {
     disableButton(nextButton);
   } else {
     enableButton(nextButton);
