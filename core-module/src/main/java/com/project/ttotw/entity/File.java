@@ -28,6 +28,10 @@ public class File extends BaseDateEntity {
     @Column(name = "saved_name", nullable = false)
     private String savedName;
 
+    //저장된 호스트
+    @Column(name = "saved_host", nullable = false)
+    private String savedHost;
+
     //저장 경로
     @Column(name = "saved_path", nullable = false)
     private String savedPath;

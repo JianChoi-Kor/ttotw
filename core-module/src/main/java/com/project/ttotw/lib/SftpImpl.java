@@ -122,6 +122,7 @@ public class SftpImpl implements FtpUtils{
         return File.builder()
                 .originName(originName)
                 .savedName(savedName)
+                .savedHost(server)
                 .savedPath(savedPath)
                 .fileExt(extension)
                 .useAt(true)

@@ -38,7 +38,7 @@ public class WineResponseDto {
             final String SEPARATOR = "/";
             final String PERIOD = ".";
 
-            String fullFilePath = file.getSavedPath() + SEPARATOR + file.getSavedName() + PERIOD + file.getFileExt();
+            String fullFilePath = file.getSavedHost() + SEPARATOR + file.getSavedPath() + SEPARATOR + file.getSavedName() + PERIOD + file.getFileExt();
 
             return WineListView.builder()
                     .id(wine.getId())
