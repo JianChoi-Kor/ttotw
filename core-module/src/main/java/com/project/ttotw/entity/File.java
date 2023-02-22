@@ -33,8 +33,11 @@ public class File extends BaseDateEntity {
     private String savedHost;
 
     //저장 경로
-    @Column(name = "saved_path", nullable = false)
-    private String savedPath;
+    @Column(name = "saved_path_1", nullable = false)
+    private String savedPath1;
+
+    @Column(name = "saved_path_2", nullable = false)
+    private String savedPath2;
 
     //파일 확장자
     @Column(name = "file_ext", nullable = false)
@@ -48,6 +51,6 @@ public class File extends BaseDateEntity {
         final String SEPARATOR = "/";
         final String PERIOD = ".";
 
-        return this.getSavedPath() + SEPARATOR + this.getSavedName() + PERIOD + this.getFileExt();
+        return this.getSavedPath1() + getSavedPath2() + SEPARATOR + this.getSavedName() + PERIOD + this.getFileExt();
     }
 }

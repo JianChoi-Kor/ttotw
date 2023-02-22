@@ -8,9 +8,6 @@ import java.util.stream.Collectors;
 
 public class WineResponseDto {
 
-    private final String SEPARATOR = "/";
-    private final String PERIOD = ".";
-
     @ToString
     @Setter
     @Getter
@@ -37,8 +34,9 @@ public class WineResponseDto {
             File file = wine.getFile();
             final String SEPARATOR = "/";
             final String PERIOD = ".";
+            final String HTTP = "http://";
 
-            String fullFilePath = file.getSavedHost() + file.getSavedPath() + SEPARATOR + file.getSavedName() + PERIOD + file.getFileExt();
+            String fullFilePath = HTTP + file.getSavedHost() + file.getSavedPath2() + SEPARATOR + file.getSavedName() + PERIOD + file.getFileExt();
 
             return WineListView.builder()
                     .id(wine.getId())

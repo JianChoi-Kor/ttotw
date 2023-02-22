@@ -81,7 +81,7 @@ public class FtpImpl implements FtpUtils {
 
         String originName = StringUtils.getFilename(file.getOriginalFilename());
         String savedName = "";
-        String savedPath = "";
+        String savedPath2 = "";
         String extension = "";
 
         try (InputStream inputStream = file.getInputStream()) {
@@ -91,7 +91,7 @@ public class FtpImpl implements FtpUtils {
             String firstDirectoryPath = fileServerDocumentRoot + SEPARATOR + firstDirectory;
             //upload directory path
             String uploadDirectoryPath = fileServerDocumentRoot + SEPARATOR + firstDirectory + SEPARATOR + yyyyMMdd;
-            savedPath = uploadDirectoryPath;
+            savedPath2 = SEPARATOR + firstDirectory + SEPARATOR + yyyyMMdd;
 
             //create directory
             createDirectory(firstDirectoryPath, uploadDirectoryPath);
@@ -116,7 +116,8 @@ public class FtpImpl implements FtpUtils {
                 .originName(originName)
                 .savedName(savedName)
                 .savedHost(server)
-                .savedPath(savedPath)
+                .savedPath1(fileServerDocumentRoot)
+                .savedPath2(savedPath2)
                 .fileExt(extension)
                 .useAt(true)
                 .build();
