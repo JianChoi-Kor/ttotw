@@ -105,3 +105,8 @@ function search() {
     const searchParam = 'keyword=' + searchKeyword;
     window.location.href = pathName + '?' + searchParam;
 }
+
+function moveToDetails(id) {
+    var details = "/wine/";
+    location.href=details + id;
+}

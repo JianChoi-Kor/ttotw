@@ -56,10 +56,10 @@
             <th:block th:unless="${result.empty}">
                 <tr th:each="item : ${result.content}">
                     <td th:text="${item.type}"></td>
-                    <td th:text="${item.originName}"></td>
-                    <td th:text="${item.koreanName}"></td>
+                    <td class="pointer" th:text="${item.originName}" th:onclick="moveToDetails([[${item.id}]])"></td>
+                    <td class="pointer" th:text="${item.koreanName}" th:onclick="moveToDetails([[${item.id}]])"></td>
                     <td>
-                        <a th:href="${item.fileFullPath}" onclick="window.open(this.href,'_blank;','width=450 height=450'); return false;">
+                        <a th:href="${item.fileFullPath}" onclick="window.open(this.href,'_blank;','width=400 height=400'); return false;">
                             <i class="fa-solid fa-wine-glass"></i>
                         </a>
                     </td>

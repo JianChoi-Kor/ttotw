@@ -64,7 +64,7 @@ public class WineResponseDto {
         private String type;
         private String originName;
         private String koreanName;
-        private Long fileId;
+        private String fullFilePath;
         private Long minPrice;
         private Long maxPrice;
         private Integer tannin;
@@ -88,6 +88,9 @@ public class WineResponseDto {
             File file = wine.getFile();
             final String SEPARATOR = "/";
             final String PERIOD = ".";
+            final String HTTP = "http://";
+
+            String fullFilePath = HTTP + file.getSavedHost() + file.getSavedPath2() + SEPARATOR + file.getSavedName() + PERIOD + file.getFileExt();
 
             return WineDetailsView.builder()
                     .id(wine.getId())
@@ -95,7 +98,7 @@ public class WineResponseDto {
                     .type(wine.getType().getDescription())
                     .originName(wine.getOriginName())
                     .koreanName(wine.getKoreanName())
-                    .fileId(wine.getFile().getId())
+                    .fullFilePath(fullFilePath)
                     .minPrice(wine.getMinPrice())
                     .maxPrice(wine.getMaxPrice())
                     .tannin(wine.getTannin())

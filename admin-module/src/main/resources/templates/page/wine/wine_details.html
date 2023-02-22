@@ -22,7 +22,7 @@
                                     <th:block th:if="${result} != null">
                                         <form id="registerWine">
 
-                                            <img class="details-image" th:src="@{/wine/image/} + ${result.fileId}" />
+                                            <img class="details-image" th:src="${result.fullFilePath}" />
 
                                             <div class="form-floating mb-3">
                                                 <input class="form-control" name="koreanName" id="koreanName"
