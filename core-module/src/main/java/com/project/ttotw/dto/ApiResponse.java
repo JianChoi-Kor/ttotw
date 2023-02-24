@@ -1,29 +1,35 @@
 package com.project.ttotw.dto;
 
-import com.project.ttotw.enums.ApiResponseStatus;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class ApiResponse {
 
-    private <T, E> ResponseEntity<?> get(ApiResponseStatus status, @Nullable String message, @Nullable T data, @Nullable E errors,
-                                         @Nullable Long page, @Nullable Long size, @Nullable Long total) {
+    private static final String STATUS_SUCCESS = "success";
+    private static final String STATUS_FAIL = "fail";
+    private static final String STATUS_ERROR = "error";
 
-        if (status.equals(ApiResponseStatus.SUCCESS)) {
+    private <T, E> ResponseEntity<?> get(String status, @Nullable String message, @Nullable T data, @Nullable E errors,
+                                         @Nullable Long page, @Nullable Integer size, @Nullable Long total) {
+
+        if (status.equals(STATUS_SUCCESS)) {
             //pagedBody
             if (page != null && size != null && total != null) {
                 return new ResponseEntity<>(PagedBody.builder()
-                        .status(status.getValue())
-                        .message(message != null ? message : "")
+                        .status(status)
+                        .message(message)
                         .data(data != null ? data : Collections.emptyList())
                         .page(page)
                         .size(size)
@@ -33,30 +39,28 @@ public class ApiResponse {
             //succeededBody
             else {
                 return new ResponseEntity<>(SucceededBody.builder()
-                        .status(status.getValue())
-                        .message(message != null ? message : "")
-                        .data(data != null ? data : null),
+                        .status(status)
+                        .message(message)
+                        .data(data),
                         HttpStatus.OK);
             }
         }
-
-        else if (status.equals(status.equals(ApiResponseStatus.FAIL))) {
+        else if (status.equals(STATUS_FAIL)) {
             return new ResponseEntity<>(FailedBody.builder()
-                    .status(status.getValue())
-                    .message(message != null ? message : "")
-                    .errors(errors != null ? errors : null),
+                    .status(status)
+                    .message(message)
+                    .errors(errors),
                     HttpStatus.OK);
         }
-
-        else if (status.equals(ApiResponseStatus.ERROR)) {
+        else if (status.equals(STATUS_ERROR)) {
             return new ResponseEntity<>(ErroredBody.builder()
-                    .status(status.getValue())
-                    .message(message != null ? message : ""),
+                    .status(status)
+                    .message(message),
                     HttpStatus.OK);
         }
 
         else {
-            throw new RuntimeException("");
+            throw new RuntimeException("Api Response Error");
         }
     }
 
@@ -75,7 +79,7 @@ public class ApiResponse {
      * @return          응답 객체
      */
     public <T> ResponseEntity<?> success(String message, T data) {
-        return get(ApiResponseStatus.SUCCESS, message, data, null, null, null, null);
+        return get(STATUS_SUCCESS, message, data, null, null, null, null);
     }
 
     /**
@@ -92,7 +96,7 @@ public class ApiResponse {
      * @return          응답 객체
      */
     public <T> ResponseEntity<?> success(T data) {
-        return get(ApiResponseStatus.SUCCESS, null, data, null, null, null, null);
+        return get(STATUS_SUCCESS, null, data, null, null, null, null);
     }
 
     /**
@@ -108,11 +112,140 @@ public class ApiResponse {
      * @return          응답 객체
      */
     public <T> ResponseEntity<?> success() {
-        return get(ApiResponseStatus.SUCCESS, null, null, null, null, null, null);
+        return get(STATUS_SUCCESS, null, null, null, null, null, null);
     }
 
-    //TODO:: 페이지네이션 정보를 포함한 성공 응답을 반환한다.
-    //TODO:: 실패 응답을 반환한다.
+    /**
+     * <p>페이지네이션 정보를 포함한 성공 응답을 반환합니다.</p>
+     * <pre>
+     *     {
+     *         "status" : "success",
+     *         "message" : null,
+     *         "data" : [{data1}, {data2} ...],
+     *         "page" : 1,
+     *         "size" : 10,
+     *         "total" : 100
+     *     }
+     * </pre>
+     *
+     * @param data      응답 바디 data 필드에 포함될 정보
+     * @param page      응답 바디 page 필드에 포함될 정보
+     * @param size      응답 바디 size 필드에 포함될 정보
+     * @param total     응답 바디 total 필드에 포함될 정보
+     * @return          응답 객체
+     */
+    public <T> ResponseEntity<?> pagination(T data, Long page, Integer size, Long total) {
+        return get(STATUS_SUCCESS, null, data, null, page, size, total);
+    }
+
+    /**
+     * <p>페이지네이션 정보를 포함한 성공 응답을 반환합니다.</p>
+     * <pre>
+     *     {
+     *         "status" : "success",
+     *         "message" : null,
+     *         "data" : [{data1}, {data2} ... ],
+     *         "page" : 1,
+     *         "size" : 10,
+     *         "total" : 100
+     *     }
+     * </pre>
+     *
+     * @param data      응답 바디 data 필드에 포함될 정보
+     * @param pageable  응답 바디 page, size 필드에 포함될 정보를 가진 Pageable 객체
+     * @param total     응답 바디 total 필드에 포함될 정보
+     * @return          응답 객체
+     */
+    public <T> ResponseEntity<?> pagination(T data, Pageable pageable, Long total) {
+        return get(STATUS_SUCCESS, null, data, null, pageable.getOffset(), pageable.getPageSize(), total);
+    }
+
+    /**
+     * <p>오류 발생 시 실패 응답을 반환합니다.</p>
+     * <pre>
+     *     {
+     *         "status" : "fail",
+     *         "message" : "fail message",
+     *         "errors" : null
+     *     }
+     * </pre>
+     *
+     * @param message   응답 바디 message 필드에 포함될 정보
+     * @return          응답 객체
+     */
+    public <T> ResponseEntity<?> fail(String message) {
+        return get(STATUS_FAIL, message, null, null, null, null, null);
+    }
+
+    /**
+     * <p>필드 에러로 인한 실패 응답을 반환합니다.</p>
+     * <pre>
+     *     {
+     *         "status" : "fail",
+     *         "message" : fail message,
+     *         "errors" : [{error data1}, {error data2} ... ]
+     *     }
+     * </pre>
+     *
+     * @param message   응답 바디 message 필드에 포함될 정보
+     * @param errors    응답 바디 errors 필드에 포함될 정보
+     * @return          응답 객체
+     */
+    public <E> ResponseEntity<?> fail(String message, E errors) {
+        return get(STATUS_FAIL, message, null, errors, null, null, null);
+    }
+
+    /**
+     * <p>필드 에러로 인한 실패 응답을 반환합니다.</p>
+     * <pre>
+     *     {
+     *         "status" : "fail",
+     *         "message" : fail message,
+     *         "errors" : [{error data1}, {error data2} ... ]
+     *     }
+     * </pre>
+     *
+     * @param errors    응답 바디 errors 필드에 포함될 정보
+     * @return          응답 객체
+     */
+    public ResponseEntity<?> fail(Errors errors) {
+        List<FieldError> fieldErrorList = errors.getAllErrors().stream().map(FieldError::new).collect(Collectors.toList());
+        return fail(null, fieldErrorList);
+    }
+
+    /**
+     * <p>필드 에러로 인한 실패 응답을 반환합니다.</p>
+     * <pre>
+     *     {
+     *         "status" : "fail",
+     *         "message" : fail message,
+     *         "errors" : [{error data1}, {error data2} ... ]
+     *     }
+     * </pre>
+     *
+     * @param bindingResult     응답 바디 errors 필드에 포함될 정보를 가진 BindingResult 객체
+     * @return                  응답 객체
+     */
+    public ResponseEntity<?> fail(BindingResult bindingResult) {
+        return fail((Errors) bindingResult);
+    }
+
+    /**
+     * <p>필드 에러로 인한 실패 응답을 반환합니다.</p>
+     * <pre>
+     *     {
+     *         "status" : "fail",
+     *         "message" : null,
+     *         "errors" : [{error data1}, {error data2} ... ]
+     *     }
+     * </pre>
+     *
+     * @param errors    응답 바디 errors 필드에 포함될 정보
+     * @return          응답 객체
+     */
+    public <E> ResponseEntity<?> fail(E errors) {
+        return get(STATUS_FAIL, null, null, errors, null, null, null);
+    }
 
     /**
      * <p>예외 발생 시 에러 응답을 반환합니다.</p>
@@ -127,7 +260,7 @@ public class ApiResponse {
      * @return          응답 객체
      */
     public <T> ResponseEntity<?> error(String message) {
-        return get(ApiResponseStatus.ERROR, message, null, null, null, null, null);
+        return get(STATUS_ERROR, message, null, null, null, null, null);
     }
 
     /**
@@ -157,7 +290,7 @@ public class ApiResponse {
         private String message;
         private T data;
         private Long page;
-        private Long size;
+        private int size;
         private Long total;
     }
 
@@ -188,4 +321,20 @@ public class ApiResponse {
         private String message;
     }
 
+    /**
+     * <p>필드 에러 출력에 사용할 객체</p>
+     */
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class FieldError {
+
+        private String field;
+        private String message;
+
+        public FieldError(ObjectError objectError) {
+            this.field = objectError.getObjectName();
+            this.message = objectError.getDefaultMessage();
+        }
+    }
 }
