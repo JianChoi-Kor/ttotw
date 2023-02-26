@@ -21,7 +21,7 @@ public class ApiResponse {
     private static final String STATUS_FAIL = "fail";
     private static final String STATUS_ERROR = "error";
 
-    private <T, E> ResponseEntity<?> get(String status, @Nullable String message, @Nullable T data, @Nullable E errors,
+    private  <T, E> ResponseEntity<?> get(String status, @Nullable String message, @Nullable T data, @Nullable E errors,
                                          @Nullable Long page, @Nullable Integer size, @Nullable Long total) {
 
         if (status.equals(STATUS_SUCCESS)) {
@@ -33,7 +33,8 @@ public class ApiResponse {
                         .data(data != null ? data : Collections.emptyList())
                         .page(page)
                         .size(size)
-                        .total(total),
+                        .total(total)
+                        .build(),
                         HttpStatus.OK);
             }
             //succeededBody
@@ -41,7 +42,8 @@ public class ApiResponse {
                 return new ResponseEntity<>(SucceededBody.builder()
                         .status(status)
                         .message(message)
-                        .data(data),
+                        .data(data)
+                        .build(),
                         HttpStatus.OK);
             }
         }
@@ -49,13 +51,15 @@ public class ApiResponse {
             return new ResponseEntity<>(FailedBody.builder()
                     .status(status)
                     .message(message)
-                    .errors(errors),
+                    .errors(errors)
+                    .build(),
                     HttpStatus.OK);
         }
         else if (status.equals(STATUS_ERROR)) {
             return new ResponseEntity<>(ErroredBody.builder()
                     .status(status)
-                    .message(message),
+                    .message(message)
+                    .build(),
                     HttpStatus.OK);
         }
 
@@ -266,8 +270,9 @@ public class ApiResponse {
     /**
      * <p>성공 응답 객체의 바디</p>
      */
-    @Data
     @Builder
+    @Setter
+    @Getter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class SucceededBody<T> {
@@ -280,8 +285,9 @@ public class ApiResponse {
     /**
      * <p>페이지네이션 정보가 포함된 응답 객체의 바디</p>
      */
-    @Data
     @Builder
+    @Setter
+    @Getter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class PagedBody<T> {
@@ -297,8 +303,9 @@ public class ApiResponse {
     /**
      * <p>실패 응답 객체의 바디</p>
      */
-    @Data
     @Builder
+    @Setter
+    @Getter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class FailedBody<E> {
@@ -311,8 +318,9 @@ public class ApiResponse {
     /**
      * <p>오류 응답 객체의 바디</p>
      */
-    @Data
     @Builder
+    @Setter
+    @Getter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ErroredBody {
@@ -324,7 +332,9 @@ public class ApiResponse {
     /**
      * <p>필드 에러 출력에 사용할 객체</p>
      */
+    @Builder
     @Getter
+    @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class FieldError {
