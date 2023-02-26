@@ -2,6 +2,7 @@ package com.project.ttotw.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import javax.validation.constraints.NotBlank;
 
@@ -16,5 +17,9 @@ public class UserRequestDto {
         //비밀번호
         @NotBlank(message = "비밀번호를 입력해주세요.")
         private String password;
+
+        public UsernamePasswordAuthenticationToken toAuthentication() {
+            return new UsernamePasswordAuthenticationToken(email, password);
+        }
     }
 }

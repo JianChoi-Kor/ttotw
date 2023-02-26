@@ -35,6 +35,7 @@ public class WebSecurityConfigure {
         //csrf disable
         http.csrf().disable();
 
+        //TODO:: 최종 단계 수정필요
         //요청에 대한 권한 설정
         http.authorizeRequests()
                 .antMatchers("/**").permitAll();

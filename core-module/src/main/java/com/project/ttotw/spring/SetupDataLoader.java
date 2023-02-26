@@ -2,9 +2,11 @@ package com.project.ttotw.spring;
 
 import com.project.ttotw.entity.Admin;
 import com.project.ttotw.entity.GrapeVarieties;
+import com.project.ttotw.entity.User;
 import com.project.ttotw.enums.Role;
 import com.project.ttotw.repository.AdminRepository;
 import com.project.ttotw.repository.GrapeVarietiesRepository;
+import com.project.ttotw.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
@@ -20,8 +22,10 @@ import java.util.List;
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     private final AdminRepository adminRepository;
+    private final UserRepository userRepository;
+
     private final GrapeVarietiesRepository grapeVarietiesRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Value("${setup.data.grape-varieties}")
     private boolean needUpdate;
@@ -42,7 +46,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
         //create initial admin
         createAdminIfNotFound("admin", "test1234!", Role.ROLE_ADMIN);
-        alreadySetup = true;
+
+        //TODO:: 테스트에서만 사용
+        //create test user
+        createTestUser("user", "test1234!", Role.ROLE_USER);
     }
 
     Admin createAdminIfNotFound(final String email, final String password, final Role role) {
@@ -50,13 +57,28 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         if (admin == null) {
             admin = Admin.builder()
                     .email(email)
-                    .password(passwordEncoder.encode(password))
+                    .password(bCryptPasswordEncoder.encode(password))
                     .role(role)
                     .build();
             //save
             adminRepository.save(admin);
         }
         return admin;
+    }
+
+    User createTestUser(final String email, final String password, final Role role) {
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user == null) {
+            user = User.builder()
+                    .email(email)
+                    .password(bCryptPasswordEncoder.encode(password))
+                    .role(role)
+                    .build();
+
+            //save
+            userRepository.save(user);
+        }
+        return user;
     }
 
     //TODO:: 해당 방식으로 관리되었을 때 데이터가 꼬일 위험이 있음, 추후에는 일반적으로 등록하고 수정하는 방식으로 변경 필요
