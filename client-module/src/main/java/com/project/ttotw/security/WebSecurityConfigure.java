@@ -1,5 +1,6 @@
 package com.project.ttotw.security;
 
+import com.project.ttotw.jwt.JwtAuthenticationFilter;
 import com.project.ttotw.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +10,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+@EnableWebSecurity
 @RequiredArgsConstructor
 @Configuration
 public class WebSecurityConfigure {
@@ -23,17 +26,21 @@ public class WebSecurityConfigure {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        //csrf disable
+        //httpBasic, csrf, formLogin, rememberMe, logout, session disable
         http.httpBasic().disable()
-                .csrf().disable();
+                .csrf().disable()
+                .formLogin().disable()
+                .rememberMe().disable()
+                .logout().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        //TODO:: 최종 단계 수정필요
         //요청에 대한 권한 설정
         http.authorizeRequests()
-                .antMatchers("/**").permitAll();
+                .antMatchers("/v1/user/signin", "/v1/user/signup").permitAll()
+                .anyRequest().authenticated();
 
+        //jwt filter 설정
+        http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

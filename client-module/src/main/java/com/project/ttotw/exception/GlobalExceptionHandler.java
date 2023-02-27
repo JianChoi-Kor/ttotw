@@ -14,9 +14,9 @@ public class GlobalExceptionHandler {
 
     private final ApiResponse response;
 
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<?> exceptionHandler(Exception e) {
-//        e.printStackTrace();
-//        return response.error("오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
-//    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> exceptionHandler(Exception e) {
+        e.printStackTrace();
+        return response.error("오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+    }
 }
