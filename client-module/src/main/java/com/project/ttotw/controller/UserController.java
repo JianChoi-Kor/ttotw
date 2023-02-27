@@ -21,6 +21,15 @@ public class UserController {
 
     private final ApiResponse response;
 
+    @PostMapping(value = "/signup")
+    public ResponseEntity<?> signup(@RequestBody @Valid UserRequestDto.SignUp signUp, Errors errors) {
+        if (errors.hasErrors()) {
+            return response.fail(errors);
+        }
+
+        return userService.signup(signUp);
+    }
+
     @PostMapping(value = "/signin")
     public ResponseEntity<?> signin(@RequestBody @Valid UserRequestDto.SignIn signIn, Errors errors) {
         if (errors.hasErrors()) {
@@ -30,12 +39,8 @@ public class UserController {
         return userService.signin(signIn);
     }
 
-    @PostMapping(value = "/signup")
-    public ResponseEntity<?> signup(@RequestBody @Valid UserRequestDto.SignUp signUp, Errors errors) {
-        if (errors.hasErrors()) {
-            return response.fail(errors);
-        }
-
-        return userService.signup(signUp);
+    @PostMapping(value = "/reissue")
+    public ResponseEntity<?> reissue() {
+        return null;
     }
 }
