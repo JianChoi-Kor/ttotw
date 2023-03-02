@@ -37,6 +37,8 @@ public class WebSecurityConfigure {
         //요청에 대한 권한 설정
         http.authorizeRequests()
                 .antMatchers("/v1/user/signin", "/v1/user/signup").permitAll()
+                //TODO:: 제거 필요
+                .antMatchers("/test/**").permitAll()
                 .anyRequest().authenticated();
 
         //jwt filter 설정

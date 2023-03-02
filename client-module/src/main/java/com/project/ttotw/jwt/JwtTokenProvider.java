@@ -1,5 +1,6 @@
 package com.project.ttotw.jwt;
 
+import com.project.ttotw.config.ExpireTime;
 import com.project.ttotw.dto.UserResponseDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -32,8 +33,6 @@ public class JwtTokenProvider {
     private static final String BEARER_TYPE = "Bearer";
     private static final String TYPE_ACCESS = "access";
     private static final String TYPE_REFRESH = "refresh";
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L;               //30분
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L;     //7일
 
     private final Key key;
 
@@ -45,10 +44,15 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    //사용자 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
+    //Authentication 을 가지고 AccessToken, RefreshToken 을 생성하는 메서드
     public UserResponseDto.TokenInfo generateToken(Authentication authentication) {
+        return generateToken(authentication.getName(), authentication.getAuthorities());
+    }
+
+    //name, authorities 를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
+    public UserResponseDto.TokenInfo generateToken(String name, Collection<? extends GrantedAuthority> inputAuthorities) {
         //권한 가져오기
-        String authorities = authentication.getAuthorities().stream()
+        String authorities = inputAuthorities.stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
@@ -56,11 +60,11 @@ public class JwtTokenProvider {
 
         //Generate AccessToken
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())
+                .setSubject(name)
                 .claim(AUTHORITIES_KEY, authorities)
                 .claim("type", TYPE_ACCESS)
                 .setIssuedAt(now)   //토큰 발행 시간 정보
-                .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_TIME))  //토큰 만료 시간 설정
+                .setExpiration(new Date(now.getTime() + ExpireTime.ACCESS_TOKEN_EXPIRE_TIME))  //토큰 만료 시간 설정
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
@@ -68,16 +72,16 @@ public class JwtTokenProvider {
         String refreshToken = Jwts.builder()
                 .claim("type", TYPE_REFRESH)
                 .setIssuedAt(now)   //토큰 발행 시간 정보
-                .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_TIME)) //토큰 만료 시간 설정
+                .setExpiration(new Date(now.getTime() + ExpireTime.REFRESH_TOKEN_EXPIRE_TIME)) //토큰 만료 시간 설정
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
         return UserResponseDto.TokenInfo.builder()
                 .grantType(BEARER_TYPE)
                 .accessToken(accessToken)
-                .accessTokenExpirationTime(ACCESS_TOKEN_EXPIRE_TIME)
+                .accessTokenExpirationTime(ExpireTime.ACCESS_TOKEN_EXPIRE_TIME)
                 .refreshToken(refreshToken)
-                .refreshTokenExpirationTime(REFRESH_TOKEN_EXPIRE_TIME)
+                .refreshTokenExpirationTime(ExpireTime.REFRESH_TOKEN_EXPIRE_TIME)
                 .build();
     }
 
