@@ -74,6 +74,7 @@ public class UserService {
                         refreshTokenRedisRepository.save(RefreshToken.builder()
                                 .id(refreshToken.getId())
                                 .ip(currentIpAddress)
+                                .authorities(refreshToken.getAuthorities())
                                 .refreshToken(tokenInfo.getRefreshToken())
                                 .build());
 

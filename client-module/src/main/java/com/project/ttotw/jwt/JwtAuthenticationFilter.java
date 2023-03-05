@@ -25,10 +25,14 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         //1. Request Header 에서 JWT Token 추출
         String token = jwtTokenProvider.resolveToken((HttpServletRequest) servletRequest);
 
+        //TODO:: 무조건 탄다, permitAll()은 이 뒤에서 검사 => 즉, 여기서 걸리는 이유는 Authorization 토큰이 있기 때문에 validateToken() 메서드에서 걸리는 것
+
         //2. validateToken 메서드로 토큰 유효성 검사
         if (token != null && jwtTokenProvider.validateToken(token)) {
-            Authentication authentication = jwtTokenProvider.getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            if (!((HttpServletRequest) servletRequest).getRequestURI().equals("/v1/user/reissue")) {
+                Authentication authentication = jwtTokenProvider.getAuthentication(token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }
