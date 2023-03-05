@@ -132,6 +132,11 @@ public class JwtTokenProvider {
         }
     }
 
+    public boolean isRefreshToken(String token) {
+        String type = (String) Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("type");
+        return type.equals(TYPE_REFRESH);
+    }
+
 //    public Long getExpiration(String accessToken) {
 //        //accessToken 남은 유효시간
 //        Date expiration = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody().getExpiration();

@@ -53,6 +53,39 @@ public class UserService {
         return response.success(tokenInfo);
     }
 
+    public ResponseEntity<?> reissue(HttpServletRequest request) {
+        //1. Request Header 에서 JWT Token 추출
+        String token = jwtTokenProvider.resolveToken(request);
+
+        //2. validateToken 메서드로 토큰 유효성 검사
+        if (token != null && jwtTokenProvider.validateToken(token)) {
+            //3. refresh token 인지 확인
+            if (jwtTokenProvider.isRefreshToken(token)) {
+                //refresh token
+                RefreshToken refreshToken = refreshTokenRedisRepository.findByRefreshToken(token);
+                if (refreshToken != null) {
+                    //4. 최초 로그인한 ip 와 같은지 확인 (처리 방식에 따라 재발급을 하지 않거나 메일 등의 알림을 주는 방법이 있음)
+                    String currentIpAddress = Helper.getClientIp(request);
+                    if (refreshToken.getIp().equals(currentIpAddress)) {
+                        // 5. Redis 에 저장된 RefreshToken 정보를 기반으로 JWT Token 생성
+                        UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(refreshToken.getId(), refreshToken.getAuthorities());
+
+                        // 4. Redis RefreshToken update
+                        refreshTokenRedisRepository.save(RefreshToken.builder()
+                                .id(refreshToken.getId())
+                                .ip(currentIpAddress)
+                                .refreshToken(tokenInfo.getRefreshToken())
+                                .build());
+
+                        return response.success(tokenInfo);
+                    }
+                }
+            }
+        }
+
+        return response.fail("토큰 갱신에 실패했습니다.");
+    }
+
     public ResponseEntity<?> signup(UserRequestDto.SignUp signUp) {
 
         //TODO:: email 중복 불가 (+ 프론트 단에서 중복 여부 체크 하도록 api 추가)
