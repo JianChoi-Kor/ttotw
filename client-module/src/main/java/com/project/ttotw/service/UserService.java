@@ -6,7 +6,7 @@ import com.project.ttotw.dto.UserResponseDto;
 import com.project.ttotw.jwt.JwtTokenProvider;
 import com.project.ttotw.lib.Helper;
 import com.project.ttotw.redis.RefreshToken;
-import com.project.ttotw.repository.RefreshTokenRedisRepository;
+import com.project.ttotw.repository.redis.RefreshTokenRedisRepository;
 import com.project.ttotw.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

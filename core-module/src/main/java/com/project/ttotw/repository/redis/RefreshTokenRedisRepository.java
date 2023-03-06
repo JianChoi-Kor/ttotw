@@ -1,4 +1,4 @@
-package com.project.ttotw.repository;
+package com.project.ttotw.repository.redis;
 
 import com.project.ttotw.redis.RefreshToken;
 import org.springframework.data.repository.CrudRepository;
