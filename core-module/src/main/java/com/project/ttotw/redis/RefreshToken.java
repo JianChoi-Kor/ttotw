@@ -23,5 +23,6 @@ public class RefreshToken {
 
     private Collection<? extends GrantedAuthority> authorities;
 
+    @Indexed
     private String refreshToken;
 }
