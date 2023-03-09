@@ -33,7 +33,7 @@ public class WineRequestDto {
         //가격
         @NotNull(message = "가격은 필수 입력값입니다.")
         @Positive(message = "잘못된 가격 입력값입니다.")
-        private Long price;
+        private Integer price;
         //타닌
         @NotNull(message = "타닌은 필수 입력값입니다.")
         @Positive(message = "잘못된 타닌(tannin) 입력값입니다.")

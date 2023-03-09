@@ -21,8 +21,8 @@ public class WineResponseDto {
         private String originName;
         private String koreanName;
         private String fileFullPath;
-        private Long minPrice;
-        private Long maxPrice;
+        private Integer minPrice;
+        private Integer maxPrice;
         private String country;
 
         @SuppressWarnings("unused")
@@ -65,8 +65,8 @@ public class WineResponseDto {
         private String originName;
         private String koreanName;
         private String fullFilePath;
-        private Long minPrice;
-        private Long maxPrice;
+        private Integer minPrice;
+        private Integer maxPrice;
         private Integer tannin;
         private Integer body;
         private Integer acidity;
