@@ -61,6 +61,7 @@ public class WineServiceImpl implements WineService {
                     .acidity(registerWine.getAcidity())
                     .dry(registerWine.getDry())
                     .country(registerWine.getCountry())
+                    .continent(registerWine.getCountry().getContinent())
                     .countryDetails(registerWine.getCountryDetails())
                     .varieties(registerWine.getVarieties())
                     .varietiesDetails(registerWine.getVarietiesDetails())

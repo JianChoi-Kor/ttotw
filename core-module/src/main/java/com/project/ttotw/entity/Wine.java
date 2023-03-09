@@ -1,5 +1,6 @@
 package com.project.ttotw.entity;
 
+import com.project.ttotw.enums.Continent;
 import com.project.ttotw.enums.CountryOfOrigin;
 import com.project.ttotw.enums.WineGrade;
 import com.project.ttotw.enums.WineType;
@@ -9,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.util.Collection;
 
 
@@ -76,6 +76,11 @@ public class Wine extends BaseDateEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "country", nullable = false)
     private CountryOfOrigin country;
+
+    //구대륙, 신대륙
+    @Enumerated(EnumType.STRING)
+    @Column(name = "continent", nullable = false)
+    private Continent continent;
 
     //생산지 상세(영문)
     @Column(name = "country_details", nullable = false)

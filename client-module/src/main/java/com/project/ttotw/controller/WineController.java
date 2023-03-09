@@ -18,6 +18,7 @@ public class WineController {
 
     private final WineServiceImpl wineServiceImpl;
 
+    //TODO:: 해당 기능에 검색엔진 적용
     @GetMapping(value = "/recommend")
     public ResponseEntity<?> recommend(WineRequestDto.Recommend recommend) {
         PageRequest pageRequest = new PageRequest();
