@@ -2,7 +2,7 @@ package com.project.ttotw.controller;
 
 import com.project.ttotw.dto.ApiResponse;
 import com.project.ttotw.dto.UserRequestDto;
-import com.project.ttotw.service.UserService;
+import com.project.ttotw.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ import javax.validation.Valid;
 @RestController
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
     private final ApiResponse response;
 
@@ -28,7 +28,7 @@ public class UserController {
             return response.fail(errors);
         }
 
-        return userService.signup(signUp);
+        return userServiceImpl.signup(signUp);
     }
 
     @PostMapping(value = "/signin")
@@ -38,11 +38,11 @@ public class UserController {
             return response.fail(errors);
         }
 
-        return userService.signin(httpServletRequest, signIn);
+        return userServiceImpl.signin(httpServletRequest, signIn);
     }
 
     @PostMapping(value = "/reissue")
     public ResponseEntity<?> reissue(HttpServletRequest httpServletRequest) {
-        return userService.reissue(httpServletRequest);
+        return userServiceImpl.reissue(httpServletRequest);
     }
 }

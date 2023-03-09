@@ -37,6 +37,7 @@ public class WebSecurityConfigure {
         //요청에 대한 권한 설정
         http.authorizeRequests()
                 .antMatchers("/v1/user/signin", "/v1/user/signup", "/v1/user/reissue").permitAll()
+                .antMatchers("/v1/wine/**").permitAll()
                 //TODO:: 제거 필요
                 .antMatchers("/test/**").permitAll()
                 .anyRequest().authenticated();
