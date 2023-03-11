@@ -28,6 +28,7 @@ public class WineServiceImpl implements WineService {
 
     public ResponseEntity<?> recommend(WineRequestDto.Recommend recommend, Pageable pageable) {
 
+        //TODO:: 더 좋은 방법?
         List<Predicate> where = new ArrayList<>();
         if (recommend.getType() != null) {
             where.add(QWine.wine.type.eq(recommend.getType()));
