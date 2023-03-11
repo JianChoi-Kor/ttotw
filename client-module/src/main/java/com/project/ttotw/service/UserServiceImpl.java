@@ -54,6 +54,10 @@ public class UserServiceImpl implements UserService {
     }
 
     public ResponseEntity<?> reissue(HttpServletRequest request) {
+
+        //TODO:: 1, 2 는 JwtAuthenticationFilter 동작과 중복되는 부분, 때문에 jwt filter 에서 다른 key 값으로 refresh token 값을
+        //넘겨주고 여기서 받아서 처리하는 방법도 적용해 볼 수 있을 듯
+
         //1. Request Header 에서 JWT Token 추출
         String token = jwtTokenProvider.resolveToken(request);
 
